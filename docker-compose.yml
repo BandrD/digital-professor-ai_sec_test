@@ -1,0 +1,17 @@
+version: '3'
+services:
+  bot:
+    build: .
+    environment:
+      - LOG_LEVEL=INFO
+    env_file:
+      - .env
+    restart: always
+    volumes:
+      - ./data:/app/data
+      - ./chroma_db_gitverse:/app/data/chroma_db_gitverse
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "128m"
+        max-file: "4"

@@ -1,0 +1,362 @@
+[
+    {
+        "content": "Хранение артефактов\n\n1. Работа с релизами\n\nФункционал релизов позволяет создавать, скачивать и удалять релизы по частям или полностью. Неавторизованному пользователю доступные релизы публичных репозиториев\n\nВ разделе приведены примеры создания, изменения, удаления релиза и работы с артефактами в его составе\n\n2. Работа с пакетами\n\nФункционал пакетов предоставляет возможность пользователям хранить пакеты и привязывать их к репозиториям\n\nВ разделе приведены примеры публикации различных пакетов\n\n3. Зеркала хранилищ\n\nИспользование зеркал позволяет ускорить процесс сборки проектов, обеспечивает непрерывную доступность артефактов, даже если основной репозиторий недоступен\n\nРабота с пакетами\n\nВ настоящем разделе вы можете ознакомиться, где отображен список всех пакетов, информация по отдельному пакету, как скачать его артефакты, привязать к репозиторию и др\n\nПорядок получения токенов для создания пакетов отражен в разделе Управление токенами\n\nНа данный момент максимальный совокупный размер всех пакетов пользователя не должен превышать 500 Мбайт\n\nРуководство по созданию пакетов представлено в разделах\n\n1. Apache Maven\n\n2. Docker\n\n3. Generic\n\n4. Go\n\n5. Helm\n\n6. NuGet\n\n7. PyPi\n\n8. npm\n\nПакеты в профиле пользователя\n\nВсе пакеты пользователя отображены в его профиле на вкладке Пакеты\n\n1. Перейдите в профиль пользователя\n\nСсылка на профиль в выпадающей панели иконки пользователя\n\n2. Выберите вкладку Пакеты\n\nСтраница пакета\n\nПереход на страницу\n\nВ профиле пользователя во вкладке Пакеты нажмите на нужный пакет\n\nОтобразится страница выбранного пакета последней версии\n\nУдаление пакета\n\nДля удаления пакета нажмите на пиктограмму удаления\n\nСкачивание артефактов\n\nНажмите на нужный артефакт и начнется скачивание\n\nСчетчик скачивания артефактов\n\nИндикатор количества загрузок пакетов находится на странице пакетов над ссылками для скачивания ассетов\n\nРедактирование пакета\n\nРедактирование пакета репозитория пользователя доступно доступно автору и соавтору с правами администратора\n\nРедактирование пакета организации доступно для команды owners и команд с правами на запись\n\nДобавление к репозиторию\n\nДобавление пакета к репозиторию\n\n1. Нажмите Редактировать\n\n2. Выберите репозиторий и нажмите Сохранить\n\nДобавленный пакет отобразится в профиле репозитория на вкладке Пакеты\n\nОтвязка пакета от репозитория при редактировании пакета\n\n1. На странице пакета нажмите Редактировать\n\n2. Далее нажмите Отвязать\n\nОтвязка пакета в профиле репозитория\n\nОтвязка пакета доступна\n\n• в профиле репозитория пользователя для владельца и\n\n• в профиле репозитория организации для команды owners и\n\nДля отвязки пакета в профиле репозитория перейдите на вкладку Пакеты и нажмите Отвязать\n\nApache Maven\n\nРепозиторий Maven Package Registry предоставляет удобный способ хранения и управления пакетами (библиотеками, артефактами) в формате Maven. Он позволяет разработчикам публиковать, обновлять и управлять зависимостями Maven-проектов\n\nПубликация пакета\n\n<code>\n\n1. Замените в settings.xml токен на ваш\n\nРасположение settings.xml\n\n<settings>\n\n<servers>\n\n<server>\n\n<id>gitverse</id>\n\n<configuration>\n\n<httpHeaders>\n\n<property>\n\n<name>Authorization</name>\n\n<value>token b9fc851700bc67f92a3394f9afd164331c529c43</value>\n\n</property>\n\n</httpHeaders>\n\n</configuration>\n\n</server>\n\n</servers>\n\n</settings>\n\n1.1. для Windows - C:\\Users\\<YourUsername>\\.m2\\settings.xml\n\n1.2. для MacOS и Linux - /home/username/.m2/settings.xml (домашняя директория пользователя)\n\n2. Добавьте следующие строки в файл конфигурации вашего проекта pom.xml\n\n<repositories>\n\n<repository>\n\n<id>gitverse</id>\n\n<url>https://gitverse.ru/api/packages/ваш_username_в_GitVerse/maven/</url>\n\n</repository>\n\n</repositories>\n\n<distributionManagement>\n\n<repository>\n\n<id>gitverse</id>\n\n<url>https://gitverse.ru/api/packages/ваш_username_в_GitVerse/maven/</url>\n\n</repository>\n\n<snapshotRepository>\n\n<id>gitverse</id>\n\n<url>https://gitverse.ru/api/packages/ваш_username_в_GitVerse/maven/</url>\n\n</snapshotRepository>\n\n</distributionManagement>",
+        "metadata": {
+            "source_file": "GitVerse_Хранение_All_V2.docx",
+            "section": [
+                "Хранение артефактов"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "api",
+                "ui",
+                "registry",
+                "storage",
+                "maven",
+                "configuration",
+                "artifacts",
+                "config",
+                "docker",
+                "packages"
+            ]
+        }
+    },
+    {
+        "content": "3. Опубликуйте пакет, выполнив команду в каталоге с вашим проектом\n\nmvn deploy\n\n4. В профиле пользователя на вкладке Пакеты отобразится новый пакет maven\n\n</code>\n\nУстановка пакета\n\nПорядок установки описан на странице пакета\n\nПример создания и подключения пакетов Maven\n\nВ данном разделе рассмотрен пример создания проекта java и публикации пакета Maven в реестр GitVerse и создания второго проекта, где мы подключаем пакет из первого\n\nДля проверки данных примеров подготовлен репозиторий gitverse_tutorials/CICD_building_projects (opens in a new tab) : ветки maven-build (opens in a new tab) и maven-puller (opens in a new tab)\n\nПодготовительные действия\n\n<code>\n\nУстановка Maven\n\nОбновите список пакетов\n\nsudo apt update\n\nУстановите Maven\n\nsudo apt install maven\n\nПроверьте установку\n\n$ mvn -version\n\nApache Maven 3.6.3\n\nMaven home: /usr/share/maven\n\nJava version: 11.0.23, vendor: Ubuntu, runtime: /usr/lib/jvm/java-11-openjdk-amd64\n\nDefault locale: en, platform encoding: UTF-8\n\nOS name: \"linux\", version: \"5.15.153.1-microsoft-standard-wsl2\", arch: \"amd64\", family: \"unix\"\n\nsettings.xml\n\nЗамените токен на ваш в settings.xml в /home/username/.m2/settings.xml\n\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<settings>\n\n<servers>\n\n<server>\n\n<id>gitverse</id>\n\n<configuration>\n\n<httpHeaders>\n\n<property>\n\n<name>Authorization</name>\n\n<value>token b9fc851700bc67f92a3394f9afd164331c529c43</value>\n\n</property>\n\n</httpHeaders>\n\n</configuration>\n\n</server>\n\n</servers>\n\n</settings>\n\n</code>\n\nЭти настройки используются Maven при обращении к реестру пакетов в GitVerse для выполнения операций, требующих аутентификации\n\n• <id>gitverse</id> : уникальный идентификатор сервера Maven, в данном случае gitverse\n\n• Authorization : в данном контексте параметр , говорит, что это заголовок, через который передается информация об аутентификации\n\n• <value>token b9fc851700bc67f92a3394f9afd164331c529c43</value> : значение параметра для HTTP-заголовка Authorization, содержащее токен доступа для аутентификации на сервере GitVerse\n\nСоздание проекта и публикация первого пакета\n\nHelloWorld.java\n\nСоздайте в директории src/main/java/ru/gitverse/tutorials.helloworld/ файл HelloWorld.java\n\n<code>\n\npackage ru.gitverse.tutorials.helloworld;\n\npublic class HelloWorld {\n\npublic static void main(String[] args) {\n\nSystem.out.println(\"Hello, World!\");\n\n}\n\n}\n\n</code>\n\nКомментарий к HelloWorld.java\n\nJava-пакет ru.gitverse.tutorials.helloworld следует разместить в директории src/main/java/ru/gitverse/tutorials/helloworld/ , чтобы Java мог правильно его распознать, т.к. структура должна соответствовать структуре каталогов\n\nПри нарушении структуры каталогов проект соберется, но команда java -jar target/hello-world-module-0.0.1.jar выполнится с ошибкой\n\n$ java -jar target/hello-world-module-0.0.1.jar\n\nError: Could not find or load main class ru.gitverse.tutorials.HelloWorld\n\npom.xml первого проекта\n\nФайл pom.xml — это файл конфигурации Maven. По умолчанию он должен быть размещен в основной директории проекта\n\nПример pom.xml для HelloWorld.java\n\n<code>\n\n<project xmlns=\"http://maven.apache.org/POM/4.0.0\"\n\nxsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\">\n\n<modelVersion>4.0.0</modelVersion>\n\n<groupId>ru.gitverse.tutorials</groupId>\n\n<artifactId>hello-world-module</artifactId>\n\n<version>0.0.1</version>\n\n<packaging>jar</packaging>\n\n<repositories>\n\n<repository>\n\n<id>gitverse</id>\n\n<url>https://gitverse.ru/api/packages/author/maven/</url>\n\n</repository>\n\n</repositories>\n\n<properties>\n\n<maven.compiler.source>11</maven.compiler.source>\n\n<maven.compiler.target>11</maven.compiler.target>\n\n</properties>\n\n<distributionManagement>\n\n<repository>\n\n<id>gitverse</id>\n\n<url>https://gitverse.ru/api/packages/author/maven/</url>\n\n</repository>\n\n<snapshotRepository>\n\n<id>gitverse</id>\n\n<url>https://gitverse.ru/api/packages/author/maven/</url>\n\n</snapshotRepository>\n\n</distributionManagement>\n\n<build>\n\n<plugins>\n\n<plugin>\n\n<groupId>org.apache.maven.plugins</groupId>",
+        "metadata": {
+            "source_file": "GitVerse_Хранение_All_V2.docx",
+            "section": [
+                "Хранение артефактов"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "api",
+                "ui",
+                "registry",
+                "storage",
+                "maven",
+                "configuration",
+                "artifacts",
+                "config",
+                "docker",
+                "packages"
+            ]
+        }
+    },
+    {
+        "content": "<artifactId>maven-jar-plugin</artifactId>\n\n<configuration>\n\n<archive>\n\n<manifest>\n\n<mainClass>ru.gitverse.tutorials.helloworld.HelloWorld</mainClass>\n\n</manifest>\n\n</archive>\n\n</configuration>\n\n</plugin>\n\n</plugins>\n\n</build>\n\n</project>\n\n</code>\n\nКомментарий к pom.xml первого проекта\n\nРаздел для публикации пакета на GitVerse с вашей учетной записью\n\n<code>\n\n<distributionManagement>\n\n<repository>\n\n<id>gitverse</id>\n\n<url>https://gitverse.ru/api/packages/author/maven/</url>\n\n</repository>\n\n<snapshotRepository>\n\n<id>gitverse</id>\n\n<url>https://gitverse.ru/api/packages/author/maven/</url>\n\n</snapshotRepository>\n\n</distributionManagement>\n\nРаздел для сборки и запуска проекта\n\n<build>\n\n<plugins>\n\n<plugin>\n\n<groupId>org.apache.maven.plugins</groupId>\n\n<artifactId>maven-jar-plugin</artifactId>\n\n<configuration>\n\n<archive>\n\n<manifest>\n\n<mainClass>ru.gitverse.tutorials.helloworld.HelloWorld</mainClass>\n\n</manifest>\n\n</archive>\n\n</configuration>\n\n</plugin>\n\n</plugins>\n\n</build>\n\n</code>\n\nСборка пакета\n\nСборка пакета\n\n<code>\n\n$ mvn clean install\n\n[INFO] Scanning for projects...\n\n...\n\n[INFO] BUILD SUCCESS\n\n[INFO] ------------------------------------------------------------------------\n\n[INFO] Total time: 1.034 s\n\n[INFO] Finished at: 2024-07-16T07:54:38+03:00\n\n[INFO] ------------------------------------------------------------------------\n\n</code>\n\nПроверка программы\n\n$ java -jar target/hello-world-module-0.0.1.jar\n\nHello, World!\n\nКогда вы выполняете команду mvn clean install , Maven очищает предыдущие собранные файлы из директории target, собирает проект, запускает тесты (если они есть), упаковывает скомпилированный код и ресурсы в JAR-файл и устанавливает его в локальный репозиторий Maven. Таким образом, JAR-файл hello-world-module-0.0.1.jar создается и устанавливается в вашем локальном репозитории\n\nПубликация пакета\n\n<code>\n\n$ mvn clean deploy\n\n[INFO] Scanning for projects...\n\n...\n\n[INFO] BUILD SUCCESS\n\n[INFO] ------------------------------------------------------------------------\n\n[INFO] Total time: 2.086 s\n\n[INFO] Finished at: 2024-07-16T07:58:00+03:00\n\n[INFO] ------------------------------------------------------------------------\n\n</code>\n\nОпубликованный пакет отобразится в профиле пользователя > Пакеты\n\nСоздание второго проекта и подключение первого пакета\n\nPuller.java\n\nСоздайте файл Puller.java в директории src/main/java/ru/gitverse/tutorials/puller\n\n<code>\n\npackage ru.gitverse.tutorials.puller;\n\nimport ru.gitverse.tutorials.helloworld.HelloWorld;\n\npublic class Puller {\n\npublic static void main(String[] args) {\n\nSystem.out.println(\"calling HelloWorld.main:\");\n\nHelloWorld.main(args);\n\n}\n\n}\n\n</code>\n\nКомментарий к Puller.java\n\nЕсли оба файла опубликованы отдельно и подключаются отдельно, то у них должны быть уникальные заголовки, соответствующие их собственным пакетам: ru.gitverse.tutorials.puller; и ru.gitverse.tutorials.helloworld; . В этом случае каждый файл имеет свой собственный уникальный пакет для избежания конфликтов и обеспечения четкой организации классов\n\nЕсли оба проекта, которые используют разные файлы, являются частью одной и той же группы проектов, то они могут иметь одинаковый групповой идентификатор. Правильное использование групповых идентификаторов в Maven обычно предполагает уникальную идентификацию группы проекта, но в рамках одной группы проектов они могут совпадать\n\npom.xml\n\nПример pom.xml для Puller.java\n\n<code>\n\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<project xmlns=\"http://maven.apache.org/POM/4.0.0\"\n\nxmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n\nxsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\">\n\n<modelVersion>4.0.0</modelVersion>\n\n<groupId>ru.gitverse.tutorials</groupId>\n\n<artifactId>puller-module</artifactId>\n\n<version>0.0.1</version>\n\n<properties>\n\n<maven.compiler.source>11</maven.compiler.source>\n\n<maven.compiler.target>11</maven.compiler.target>\n\n</properties>\n\n<repositories>\n\n<repository>\n\n<id>gitverse</id>",
+        "metadata": {
+            "source_file": "GitVerse_Хранение_All_V2.docx",
+            "section": [
+                "Хранение артефактов"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "api",
+                "ui",
+                "registry",
+                "storage",
+                "maven",
+                "configuration",
+                "artifacts",
+                "config",
+                "docker",
+                "packages"
+            ]
+        }
+    },
+    {
+        "content": "<url>https://gitverse.ru/api/packages/author/maven</url>\n\n</repository>\n\n</repositories>\n\n<distributionManagement>\n\n<repository>\n\n<id>gitverse</id>\n\n<url>https://gitverse.ru/api/packages/author/maven</url>\n\n</repository>\n\n<snapshotRepository>\n\n<id>gitverse</id>\n\n<url>https://gitverse.ru/api/packages/author/maven</url>\n\n</snapshotRepository>\n\n</distributionManagement>\n\n<build>\n\n<plugins>\n\n<plugin>\n\n<artifactId>maven-jar-plugin</artifactId>\n\n<configuration>\n\n<archive>\n\n<manifest>\n\n<addClasspath>true</addClasspath>\n\n<mainClass>ru.gitverse.tutorials.Puller</mainClass>\n\n</manifest>\n\n</archive>\n\n</configuration>\n\n</plugin>\n\n<plugin>\n\n<groupId>org.apache.maven.plugins</groupId>\n\n<artifactId>maven-shade-plugin</artifactId>\n\n<version>3.6.0</version>\n\n<configuration>\n\n</configuration>\n\n<executions>\n\n<execution>\n\n<phase>package</phase>\n\n<goals>\n\n<goal>shade</goal>\n\n</goals>\n\n</execution>\n\n</executions>\n\n</plugin>\n\n</plugins>\n\n</build>\n\n<dependencies>\n\n<dependency>\n\n<groupId>ru.gitverse.tutorials</groupId>\n\n<artifactId>hello-world-module</artifactId>\n\n<version>0.0.1</version>\n\n<scope>compile</scope>\n\n</dependency>\n\n</dependencies>\n\n</project>\n\n</code>\n\nКомментарий к pom.xml второго проекта\n\nДля подключения пакета из реестра GitVerse можно обратиться к инструкции на странице самого пакета\n\nПерейдите на страницу пакета\n\nОтобразится страница с инструкциями для подключения пакета\n\nВ дополнение к <repositories> , <distributionManagement> и <build> в pom.xml появился раздел <dependencies> для подключения ранее опубликованного hello-world-module\n\n<code>\n\n<dependencies>\n\n<dependency>\n\n<groupId>ru.gitverse.tutorials</groupId>\n\n<artifactId>hello-world-module</artifactId>\n\n<version>0.0.1</version>\n\n<scope>compile</scope>\n\n</dependency>\n\n</dependencies>\n\n</code>\n\nСборка пакета\n\nВведите команду mvn clean install\n\n<code>\n\n$ mvn clean install\n\n[INFO] Scanning for projects...\n\n...\n\nBUILD SUCCESS\n\n[INFO] ------------------------------------------------------------------------\n\n[INFO] Total time: 1.741 s\n\n[INFO] Finished at: 2024-07-16T11:34:17+03:00\n\n[INFO] ------------------------------------------------------------------------\n\n</code>\n\nmvn clean install автоматически загрузит зависимости из реестра перед компиляцией и упаковкой проекта\n\nПроверка программы\n\n<code>\n\n$ java -jar target/puller-module-1.0-SNAPSHOT.jar\n\ncalling HelloWorld.main:\n\nHello, World!\n\n</code>\n\nПубликация пакета второго проекта\n\nДалее можете опубликовать новый пакет\n\n<code>\n\n$ mvn clean deploy\n\n...\n\n[INFO] BUILD SUCCESS\n\n[INFO] ------------------------------------------------------------------------\n\n[INFO] Total time: 3.804 s\n\n[INFO] Finished at: 2024-07-16T11:35:38+03:00\n\n[INFO] ------------------------------------------------------------------------\n\n<​/code>\n\nВторой пакет отобразится в профиле пользователя > Пакеты\n\nDocker\n\nРеестр контейнеров Docker (Container Registry) — централизованное хранилище Docker-образов и других контейнеров, обеспечивающие управление и распространения контейнеризированных приложений и образов\n\nDockerfile - файл с инструкциями по созданию Docker-образа. В Dockerfile определяется порядок создания контейнера, установки зависимостей, копирования файлов, настройки окружения и др\n\nСоглашение об именовании контейнеров\n\nПример именования образов вида реестр/владелец/образ\n\n<code>\n\n# построить образ с тегом\n\ndocker build -t реестр/владелец/образ:тег .\n\n# назвать существующий образ с тегом\n\ndocker tag некоторый-существующий-образ:тег реестр/владелец/образ:тег\n\nгде ваш реестр - это домен вашего экземпляра GitVerse (gitverse.example.ru)\n\nПример допустимых имен образов для владельца coauthor в GitVerse\n\ngitverse.ru/coauthor/myimage\n\ngitverse.ru/coauthor/my-image\n\ngitverse.ru/coauthor/my/image\n\n<​/code>\n\nРеестр поддерживает только регистронезависимые имена тегов. Поэтому образы image:tag и image:Tag рассматриваются как один и тот же образ с одним и тем же тегом\n\nПубликация пакета Docker\n\n<code>\n\n1. Выполните команды",
+        "metadata": {
+            "source_file": "GitVerse_Хранение_All_V2.docx",
+            "section": [
+                "Хранение артефактов"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "api",
+                "ui",
+                "registry",
+                "storage",
+                "maven",
+                "configuration",
+                "artifacts",
+                "config",
+                "docker",
+                "packages"
+            ]
+        }
+    },
+    {
+        "content": "docker login -u ваш_username_в_GitVerse gitverse.ru\n\n2. Соберите контейнер\n\ndocker build -t gitverse.ru/ваш_username_в_GitVerse/название_пакета:версия_пакета .\n\n3. Отправьте контейнер\n\ndocker push gitverse.ru/ваш_username_в_GitVerse/название_пакета:версия_пакета\n\n<​/code>\n\nУстановка пакета\n\nПорядок установки описан на странице пакета\n\nGeneric\n\nРеестр пакетов Generic на GitVerse — это общее хранилище различных типов пакетов и файлов cо следующими допустимыми форматами: .csv , .docx , .fodg , .fodp , .fods , .fodt , .gif , .gz , .jpeg , .jpg , .log , .md , .odf , .odg , .odp , .ods , .odt , .patch , .pdf , .png , .pptx , .svg , .tgz , tgz.xz , .txt , .webm , .xls , .xlsx , .zip\n\nПубликация пакетов Generic\n\n1. Создайте токен\n\n2. Для публикации выполните команду, заменив в ней соответствующие поля на ваши\n\n<code>\n\ncurl --user ваш_username:ваш_токен \\\n\n--upload-file полное_имя_пакета.zip \\\n\nhttps://gitverse.ru/api/packages/имя_пользователя/generic/имя_пакета/версия_пакета/имя_файла\n\ncurl --user author2:b264391117a87486fab14708e2797849e987be8b --upload-file generic_pkg_example.zip https://gitverse.ru/api/packages/author2/generic/generic_pkg_example/1.0.0/generic_pkg_example.zip\n\n</code>\n\nУстановка пакета\n\nПорядок установки описан на странице пакета\n\nGo\n\nРеестр пакетов Go на GitVerse предназначен для хранения, управления и распространения Go-пакетов\n\nТребования к zip-архиву\n\nВ составе архива должен быть каталог с именем в формате модуль@версия или модуль@версия-timestamp-commit hash , например pkg-example1@v1.0.0 или pkg-example1@v2.1.0-20230520120000-8a3d2e1f7b11\n\nC требованиями к zip-архиву пакета go можно ознакомиться на странице https://go.dev/ref/mod#zip-files (opens in a new tab)\n\nПояснения\n\n1. модуль должен быть именем модуля Go, который обычно соответствует имени репозитория или основной директории модуля\n\n2. версия должна быть согласована с семантическим версионированием\n\n3. timestamp должен содержать информацию о времени сборки архива\n\n4. commit hash представляет собой хэш коммита из репозитория\n\nРекомендации\n\n1. оптимизация: для уменьшения размера архива рекомендуется удалять все ненужные файлы, такие как файлы тестов, временные файлы и файлы конфигурации\n\n2. ясность: используйте понятные и описательные имена каталогов и файлов, чтобы облегчить понимание структуры пакета\n\n3. согласованность: придерживайтесь единого стиля именования для всех каталогов и файлов в пакете\n\nПример правильной структуры\n\n<code>\n\ngo-package/\n\n├── main.go\n\n├── internal/\n\n│ ├── utils.go\n\n│ └── server.go\n\n└── cmd/\n\n└── app/\n\n└── main.go\n\n</code>\n\nПубликация пакета\n\n1. Создайте токен\n\n2. Для публикации выполните команду, заменив в ней соответствующие поля на ваши\n\n<code>\n\ncurl --user ваш_username:ваш_токен \\\n\n--upload-file путь/к/файлу.zip \\\n\nhttps://gitverse.ru/api/packages/ваш_username/go/upload\n\ncurl --user author2:73630ec71155c3014bcc50ca5b63e8cc8440ed8f --upload-file calculator-v1.0.0.zip https://gitverse.ru/api/packages/author2/go/upload\n\n</code>\n\n3. В профиле пользователя на вкладке Пакеты добавится новый пакет\n\nУстановка пакета\n\nПорядок установки описан на странице пакета\n\nHelm\n\nРеестр шаблонов Helm (Helm Chart Registry) на GitVerse — это централизованное хранилище для шаблонов приложений Kubernetes\n\nПубликация\n\nПубликация пакетов Helm\n\nПеред публикацией создайте токен пакета\n\nЧерез curl\n\nДля публикации через curl выполните команду, заменив в ней соответствующие поля на ваши\n\n<code>\n\ncurl --user ваш_username:ваш_токен \\\n\n-X POST --upload-file ./файл.tgz \\\n\nhttps://gitverse.ru/api/packages/ваш_username/helm/api/charts\n\ncurl --user author2:1e89ba340001bd3d56ba46fe202289bcb85aa5c4 -X POST --upload-file ./helm_pkg_example-0.0.1.tgz https://gitverse.ru/api/packages/author2/helm/api/charts\n\n</code>\n\nЧерез cm-push плагин\n\nДля публикации с использованием плагина cm-push (opens in a new tab) выполните команду, заменив в ней соответствующие поля на ваши\n\n<code>",
+        "metadata": {
+            "source_file": "GitVerse_Хранение_All_V2.docx",
+            "section": [
+                "Хранение артефактов"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "api",
+                "ui",
+                "registry",
+                "storage",
+                "maven",
+                "configuration",
+                "artifacts",
+                "config",
+                "docker",
+                "packages"
+            ]
+        }
+    },
+    {
+        "content": "helm repo add --username ваш_username --password ваш_токен имя_пакета https://gitverse.ru/api/packages/ваш_username/helm\n\nhelm cm-push ./файл.tgz имя_пакета\n\nhelm repo add --username author2 --password eb98ff73e74dd4645b4f7b3361d48248a4aa05ff helm_pkg_example https://gitverse.ru/api/packages/author/helm\n\nhelm cm-push ./helm_pkg_example-0.0.1.tgz helm_pkg_example\n\n</code>\n\nПубликация в виде контейнерного образа\n\nOCI репозиторий Gitverse предназначен для хранения контейнеров и связанных с ними ресурсов в соответствии со стандартами OCI (Open Container Initiative) (opens in a new tab)\n\n1. Авторизуйтесь в службе реестра пакетов\n\nПри запросе введите токен (или пароль учетной записи)\n\nhelm registry login -u имя_пользователя gitverse.ru\n\nhelm registry login -u author2 gitverse.ru\n\n2. Опубликуйте Helm-пакета\n\nhelm push файл.tgz oci://gitverse.ru/ваш_username\n\nhelm push helm_chart_packages-0.1.0.tgz oci://gitverse.ru/author2\n\nУстановка пакета\n\nПорядок установки описан на странице пакета\n\nnpm\n\nРеестр пакетов npm (Node Package Manager) - это централизованное хранилище, где разработчики могут публиковать, обнаруживать и управлять пакетами JavaScript для общего использования\n\n.npmrc - файл конфигурации npm, который содержит параметры, такие как настройки реестра, токены аутентификации и другие параметры, используемые при работе с пакетами npm\n\n.npmrc обычно располагается в домашней директории пользователя\n\n• /home/username/.npmrc для Linux -\n\n• C:\\Users\\Username.npmrc для Windows -\n\nПубликация пакета\n\n1. Создайте токен\n\n2. Отредактируйте .npmrc\n\n//gitverse.ru/api/packages/ваш_username_в_GitVerse/npm/:_authToken=созданный_токен\n\nregistry=https://gitverse.ru/api/packages/ваш_username_в_GitVerse/npm/\n\n3. Отредактируйте package.json . Пример\n\n</code>\n\n{\n\n\"name\": \"npm\",\n\n\"version\": \"2.1.0\",\n\n\"description\": \"описание_вашего_пакета\",\n\n\"main\": \"index.js\",\n\n\"scripts\": {\n\n\"test\": \"echo \\\"Error: no test specified\\\" && exit 1\"\n\n},\n\n\"author\": \"\",\n\n\"license\": \"ISC\",\n\n\"dependencies\": {\n\n\"npm_pack\": \"^1.1.4\",\n\n\"npm_pack_v1\": \"^1.1.1\"\n\n}\n\n}\n\n</code>\n\n4. Опубликуйте пакет\n\nnpm publish\n\nПрекращение публикации пакета\n\nnpm unpublish @test/test_package\n\nnpm unpublish @test/test_package@1.0.0\n\nУстановка пакета\n\nПорядок установки описан на странице пакета\n\nПоддержка тегов версий npm реестром\n\n# npm dist-tag add название_пакета@версия_пакета тег\n\nnpm dist-tag add test_package@1.0.2 release\n\nNuGet\n\nПакеты NuGet содержат сборки .NET, конфигурационные файлы, документацию и другие ресурсы, необходимые для использования определенной функциональности в проекте\n\nРеестр пакетов NuGet на GitVerse предоставляет пользователям хранить и управлять собственными пакетами NuGet\n\nПубликация пакетов NuGet\n\nПубликация пакетов NuGet\n\n1. Создайте токен\n\n2. Добавьте новый источник пакетов NuGet, заменив в команде соответствующие поля на ваши\n\ndotnet nuget add source --name имя_источника \\\n\n--username ваш_username --password ваш_токен \\\n\n--store-password-in-clear-text \\\n\nhttps://gitverse.ru/api/packages/ваш_username/nuget/index.json\n\ndotnet nuget add source --name nuget_pkg_example --username author2 --password 1e89ba340001bd3d56ba46fe202289bcb85aa5c4 --store-password-in-clear-text https://gitverse.ru/api/packages/author2/nuget/index.json\n\n3. Для публикации выполните команду, заменив в ней соответствующие поля на ваши\n\ndotnet nuget push --source имя_источника \\\n\nпуть/к/файлу.nupkg\n\ndotnet nuget push --source nuget_pkg_example bin/Release/nuget_pkg_example.1.0.0.nupkg\n\nУстановка пакета\n\nПорядок установки описан на странице пакета\n\nPyPI\n\nРеестр пакетов Python Package Index (PyPI) - централизованное хранилище, где разработчики могут публиковать, обнаруживать и управлять пакетами Python для общего использования\n\n.pypirc - конфигурационный файл, используемый для настройки параметров доступа к PyPI при публикации пакетов Python. Файл расположен в домашней папке\n\n• для ОС Linux -\n\n• для Windows -",
+        "metadata": {
+            "source_file": "GitVerse_Хранение_All_V2.docx",
+            "section": [
+                "Хранение артефактов"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "api",
+                "ui",
+                "registry",
+                "storage",
+                "maven",
+                "configuration",
+                "artifacts",
+                "config",
+                "docker",
+                "packages"
+            ]
+        }
+    },
+    {
+        "content": "pyproject.toml - файл конфигурации проекта Python, который используется для определения информации о проекте, зависимостях, сборке и других настройках. Файл pyproject.toml обычно располагается в корневой директории проекта Python\n\nПубликация пакетов PyPI\n\n1. Отредактируйте локальный файл .pypirc ( vi ~/.pypirc ). Пример\n\n<code>\n\n[distutils]\n\nindex-servers = gitverse\n\n[gitverse]\n\nrepository = https://gitverse.ru/api/packages/ваше_имя/pypi\n\nusername = ваш_username_в_GitVerse\n\npassword = ваш_пароль_в_GitVerse\n\n[global]\n\ntrusted-host = https://gitverse.ru\n\n2. Откройте файл pyproject.toml и внесите изменения. Пример\n\n[build-system]\n\nrequires = [\"hatchling\"]\n\nbuild-backend = \"hatchling.build\"\n\n[project]\n\nname = \"pypi_package_example\"\n\nversion = \"1.0.0\"\n\nauthors = [\n\n{ name=\"coauthor1\", email=\"coauthor1@gitverse.ru\" },\n\n]\n\ndescription = \"A small example package\"\n\nreadme = \"README.md\"\n\nrequires-python = \">=3.8\"\n\nclassifiers = [\n\n\"Programming Language :: Python :: 3\",\n\n\"License :: OSI Approved :: MIT License\",\n\n\"Operating System :: OS Independent\",\n\n]\n\n3. Выполните команды\n\npython3 -m pip install --upgrade build\n\npython3 -m build\n\npython3 -m pip install --upgrade twine\n\npython3 -m twine upload --repository gitverse dist/*\n\n</code>\n\nФайлы пакета имеют расширения .tar.gz и .whl . Нельзя опубликовать пакет, если пакет с таким же именем и версией уже существует. Сначала нужно удалить существующий пакет\n\nУстановка пакета\n\nПорядок установки описан на странице пакета\n\nРабота с релизами\n\nПросмотр списка релизов\n\nДля просмотра списка релизов перейдите в профиль репозитория и выберите вкладку Релизы\n\nПросмотр и поиск релизов по тегам\n\n1. В профиле репозитория > Релизы нажмите Теги для отображения списка тегов релизов\n\n2. Введите в поле поиска по тегам имя или часть имени тега, чтобы отфильтровать список\n\nСоздание релиза\n\nДля создания нового релиза требуется присвоить тег релизному коммиту (см. Добавление тега к коммиту )\n\n1. Откройте Релизы в профиле репозитория, нажмите Новый релиз\n\nОтобразится форма создания нового релиза\n\n2. Выберите тег\n\nОтобразится\n\n3. Заполните название и описание релиза\n\n4. В примере прикреплено демо и комплект документации\n\n5. Отметьте требуемые чекбоксы из списка\n\n5.1. Предварительный релиз — такой релиз не учитывается счетчиком числа релизов\n\n5.2. Использовать заголовок релиза в качестве сообщения тега , чтобы обновить аннотацию тега\n\n5.3. Ограничение доступа для неавторизованных пользователей — запрещает неавторизованным пользователям скачивание артефактов релиза вручную\n\n6. Нажмите Опубликовать релиз\n\nНовый релиз отобразится на вкладке Релизы\n\n7. Нажмите Ассеты , чтобы посмотреть файлы из состава релиза\n\nУдаление релиза\n\nНа вкладке Релизы нажмите на пиктограмму удаления рядом с именем релиза\n\nИзменение релиза\n\n1. Нажмите на пиктограмму редактирования\n\n2. Внесите нужные изменения и нажмите Сохранить . В примере меняется название релиза\n\nВ списке релизов отобразится новое название. «Deprecated» в названии указывает на то, что данный релиз устарел и рекомендуется использовать более новые версии\n\nАртефакты в составе релиза\n\nТребования к артефактам\n\n1. Максимальный размера одного файла — 100 Мбайт (запланировано увеличение до 2048 Мбайт)\n\n2. Максимальное количество файлов, доступное для загрузки за один раз — 5\n\n3. Максимальный совокупный объем файлов для загрузки за один раз — 500 Мбайт\n\n4. Допустимые форматы — .7z , .AppImage , .apk , .cab , .csv , doc , .docx , .fodg , .fodp , .fods , .fodt , .gif , .gz , .jar , .jpeg , .jpg , .js , .log , .md , .odf , .odg , .odp , .ods , .odt , .patch , .pdf , .png , .pptx , rar , .svg , .tgz , tgz.xz , .txt , .webm , .whl , .xls , .xlsx , .zip\n\nДобавление/удаление\n\nДобавлять и удалять артефакты возможно при редактировании и при создании релиза (см. шаг 6)\n\nОграничение доступа к содержимому релиза\n\nЧтобы запретить неавторизованным пользователям ручное скачивание ассетов релиза\n\n1. перейдите в редактирование релиза\n\n2. отметьте соответствующий чекбокс\n\n3. сохраните изменения",
+        "metadata": {
+            "source_file": "GitVerse_Хранение_All_V2.docx",
+            "section": [
+                "Хранение артефактов"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "api",
+                "ui",
+                "registry",
+                "storage",
+                "maven",
+                "configuration",
+                "artifacts",
+                "config",
+                "docker",
+                "packages"
+            ]
+        }
+    },
+    {
+        "content": "Для неавторизованного пользователя при просмотре содержимого релиза рядом с ассетами отобразится сообщение\n\nСкачивание\n\nРаскройте меню Ассеты на нужном релизе и нажмите на имя файла, чтобы начать его скачивание\n\nСчетчик загрузок релиза\n\nИндикатор количества загрузок артефактов из состава релиза находится в меню Ассеты рядом с именем файла\n\nЗеркала хранилищ\n\nЗеркало репозитория — это копия удаленного репозитория, расположенная ближе к вам или на более быстром сервере. Использование зеркала позволяет ускорить процесс сборки проектов, так как Maven будет искать необходимые артефакты на локальном зеркале, а не на удаленном сервере\n\nЗачем нужны зеркала репозиториев\n\n• стабильность и доступность — зеркало обеспечивает непрерывную доступность артефактов, даже если основной репозиторий недоступен\n\n• ускорение сборки — загрузка артефактов с локального зеркала происходит гораздо быстрее, чем с удаленного сервера, особенно если он находится в другой стране\n\nВ разделах описан порядок подключения следующих зеркал\n\n1. Зеркало Maven\n\nДополнительно содержит пример проекта с сериализацией и десериализацией JSON на Java с установкой зависимостей через зеркало хранилища Maven\n\n2. Зеркало NPM\n\nДополнительно содержит пример простейшего веб-приложения с установкой зависимостей через зеркало хранилища NPM\n\n3. Зеркало Docker Hub\n\nЗеркало Maven Beta\n\nhttps://mvn-mirror.gitverse.ru является зеркалом Maven Central Repository (opens in a new tab) . GitVerse не несет ответственность за содержимое пакетов, пакеты зеркалируются с указанного источника и поставляются как есть\n\nСервис доступен в режиме Beta , соглашение об уровне сервиса (SLA) уточняется\n\nНастройка зеркала репозитория в Maven\n\nДля настройки зеркала необходимо отредактировать файл settings.xml . Он обычно находится в директории .m2 в домашнем каталоге пользователя\n\n1. Откройте файл settings.xml .m2 в вашем домашнем каталоге. Если файл отсутствует, создайте его\n\n2. Внутри тега <settings> добавьте секции зеркала и профиля\n\nГде\n\n<​/code>\n\n<!-- Секция mirrors -->\n\n<mirrors>\n\n<mirror>\n\n<id>mvn-mirror</id>\n\n<name>GitVerse Maven Mirror</name>\n\n<url>https://mvn-mirror.gitverse.ru</url>\n\n<mirrorOf>*</mirrorOf>\n\n</mirror>\n\n</mirrors>\n\n<profiles>\n\n<profile>\n\n<id>gitverse</id>\n\n<repositories>\n\n<repository>\n\n<id>mvn-mirror</id>\n\n<url>https://mvn-mirror.gitverse.ru</url>\n\n<releases><enabled>true</enabled></releases>\n\n<snapshots><enabled>true</enabled></snapshots>\n\n</repository>\n\n</repositories>\n\n<pluginRepositories>\n\n<pluginRepository>\n\n<id>mvn-mirror</id>\n\n<url>https://mvn-mirror.gitverse.ru</url>\n\n<releases><enabled>true</enabled></releases>\n\n<snapshots><enabled>true</enabled></snapshots>\n\n</pluginRepository>\n\n</pluginRepositories>\n\n</profile>\n\n</profiles>\n\n<!-- Секция активации профиля -->\n\n<activeProfiles>\n\n<activeProfile>gitverse</activeProfile>\n\n</activeProfiles>\n\n2.1. <id> - уникальный идентификатор профиля\n\n2.2. <name> — описание зеркала\n\n2.3. <url> — URL-адрес зеркала Зеркала GitVerse\n\n2.4. <mirrorOf> — Идентификатор репозитория, который будет заменен зеркалом GitVerse\n\n3. Полный пример файла settings.xml\n\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<settings>\n\n<!-- Секция mirrors -->\n\n<mirrors>\n\n<mirror>\n\n<id>mvn-mirror</id>\n\n<name>GitVerse Maven Mirror</name>\n\n<url>https://mvn-mirror.gitverse.ru</url>\n\n<mirrorOf>*</mirrorOf>\n\n</mirror>\n\n</mirrors>\n\n<profiles>\n\n<profile>\n\n<id>gitverse</id>\n\n<repositories>\n\n<repository>\n\n<id>mvn-mirror</id>\n\n<url>https://mvn-mirror.gitverse.ru</url>\n\n<releases><enabled>true</enabled></releases>\n\n<snapshots><enabled>true</enabled></snapshots>\n\n</repository>\n\n</repositories>\n\n<pluginRepositories>\n\n<pluginRepository>\n\n<id>mvn-mirror</id>\n\n<url>https://mvn-mirror.gitverse.ru</url>\n\n<releases><enabled>true</enabled></releases>\n\n<snapshots><enabled>true</enabled></snapshots>\n\n</pluginRepository>\n\n</pluginRepositories>\n\n</profile>\n\n</profiles>\n\n<!-- Секция активации профиля -->\n\n<activeProfiles>\n\n<activeProfile>gitverse</activeProfile>\n\n</activeProfiles>\n\n</settings>",
+        "metadata": {
+            "source_file": "GitVerse_Хранение_All_V2.docx",
+            "section": [
+                "Хранение артефактов"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "api",
+                "ui",
+                "registry",
+                "storage",
+                "maven",
+                "configuration",
+                "artifacts",
+                "config",
+                "docker",
+                "packages"
+            ]
+        }
+    },
+    {
+        "content": "<​/code>\n\n4. Перезапустите Maven\n\nmvn clean install\n\nНастройка множества зеркал\n\nДля настройки множества зеркал необходимо добавить элементы <mirror> внутри тега <mirrors> . Каждый элемент <mirror> будет представлять отдельное зеркало\n\n<mirrors>\n\n<mirror>\n\n<id>mvn-mirror</id>\n\n<name>GitVerse Maven Mirror</name>\n\n<url>https://mvn-mirror.gitverse.ru</url>\n\n<mirrorOf>central</mirrorOf>\n\n</mirror>\n\n<mirror>\n\n<id>new-mirror</id>\n\n<name>New Mirror Repository</name>\n\n<url>http://new-mirror.example.com/repository/maven-public/</url>\n\n<mirrorOf>central</mirrorOf>\n\n</mirror>\n\n</mirrors>\n\nГде\n\n• <id> — уникальный идентификатор для каждого зеркала\n\n• <name> — описание зеркала\n\n• <URL> — адрес зеркала\n\n• <mirrorOf> — идентификатор репозитория, который будет заменен зеркалом. В данном примере оба зеркала заменяют центральный репозиторий Maven\n\nПример подключения зеркала в проекта Java\n\nНастоящий проект доступен в репозитории GitVerse, в ветке maven-mirror (opens in a new tab) и показывает пример подключения maven-пакета com.fasterxml.jackson через зеркало https://mvn-mirror.gitverse.ru\n\nПроект использует класс ObjectMapper для преобразования формата JSON в объекты Java и наоборот, результат сериализации и десериализации выводится в консоль\n\nПодробнее смотрите ниже в описании файла JsonExample.java\n\nСтруктура проекта\n\n<code>\n\ngitverse-registry-mirrors/\n\n├── README.md\n\n├── dependency-reduced-pom.xml\n\n├── pom.xml\n\n├── settings.xml # приведен для справки\n\n├── src\n\n│ └── main\n\n│ └── java\n\n│ └── ru/gitverse/tutorials/jsonexample\n\n│ └── JsonExample.java\n\n└── target/\n\n<​/code>\n\nКраткое описание\n\n• — настоящее руководство\n\n• — информация о зависимостях в объединенном JAR-файле. Создается автоматически в Maven-проекте при использовании плагина\n\n• — описание зависимости нашего проекта\n\n• — каталог для исходного кода Java\n\n• ru.gitverse.tutorials.jsonexample.JsonExample — файл класса, где — полное квалифицированное имя класса. Компилятор Java использует полное имя класса для поиска соответствующего файла с исходным кодом\n\n• — каталог создается автоматически при выполнении команд сборки проекта и автоматические удаляется при пересборке и очистке\n\ndependency-reduced-pom.xml\n\nФайл dependency-reduced-pom.xm l создается автоматически в Maven проекте при использовании плагина maven-shade-plugin , в нем содержится информацию о зависимостях в объединенном JAR-файле (fat JAR) после процесса упаковки\n\nПлагин maven-shade-plugin позволяет упаковать все зависимости в один JAR-файл (fat JAR), подключение плагина в pom.xml описано далее\n\npom.xml\n\npom.xml (Project Object Model) - основной файл конфигурации в проектах, использующих систему сборки Maven. Он представляет собой XML-файл, который содержит всю необходимую информацию о проекте: от его названия и версии до зависимостей от других библиотек и плагинов, используемых для сборки\n\nКод файла pom.xml\n\n<code>\n\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<project>\n\n<modelVersion>4.0.0</modelVersion>\n\n<groupId>your-group-id</groupId>\n\n<artifactId>jsonexample</artifactId>\n\n<version>1.0-SNAPSHOT</version>\n\n<properties>\n\n<java.version>11</java.version>\n\n</properties>\n\n<dependencies>\n\n<dependency>\n\n<groupId>com.fasterxml.jackson.core</groupId>\n\n<artifactId>jackson-databind</artifactId>\n\n<version>2.17.1</version>\n\n</dependency>\n\n</dependencies>\n\n<build>\n\n<plugins>\n\n<plugin>\n\n<groupId>org.apache.maven.plugins</groupId>\n\n<artifactId>maven-jar-plugin</artifactId>\n\n<version>3.3.0</version>\n\n<configuration>\n\n<archive>\n\n<manifest>\n\n<addClasspath>true</addClasspath>\n\n<mainClass>ru.gitverse.tutorials.jsonexample.JsonExample</mainClass>\n\n</manifest>\n\n</archive>\n\n</configuration>\n\n</plugin>\n\n<plugin>\n\n<groupId>org.apache.maven.plugins</groupId>\n\n<artifactId>maven-compiler-plugin</artifactId>\n\n<version>3.11.0</version>\n\n<configuration>\n\n<source>11</source>\n\n<target>11</target>\n\n</configuration>\n\n</plugin>\n\n<plugin>\n\n<groupId>org.apache.maven.plugins</groupId>\n\n<artifactId>maven-shade-plugin</artifactId>\n\n<version>3.6.0</version>",
+        "metadata": {
+            "source_file": "GitVerse_Хранение_All_V2.docx",
+            "section": [
+                "Хранение артефактов"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "api",
+                "ui",
+                "registry",
+                "storage",
+                "maven",
+                "configuration",
+                "artifacts",
+                "config",
+                "docker",
+                "packages"
+            ]
+        }
+    },
+    {
+        "content": "<configuration>\n\n<!-- put your configurations here -->\n\n</configuration>\n\n<executions>\n\n<execution>\n\n<phase>package</phase>\n\n<goals>\n\n<goal>shade</goal>\n\n</goals>\n\n</execution>\n\n</executions>\n\n</plugin>\n\n<plugin>\n\n<groupId>org.codehaus.mojo</groupId>\n\n<artifactId>exec-maven-plugin</artifactId>\n\n<version>3.5.0</version>\n\n<configuration>\n\n<mainClass>ru.gitverse.tutorials.jsonexample.JsonExample</mainClass>\n\n</configuration>\n\n</plugin>\n\n</plugins>\n\n</build>\n\n</project>\n\n</code>\n\nСекции pom.xml\n\n• <modelVersion> — указывает версию модели POM\n\n• <groupId> — идентификатор группы проекта, используется для уникальной идентификации проекта\n\n• <artifactId> — идентификатор артефакта проекта, обычно это имя проекта\n\n• <version> — версия проекта. Версия 1.0-SNAPSHOT означает, что проект находится в стадии разработки (SNAPSHOT)\n\n• java -version — версия Java для сборки проекта. Посмотреть свою версию Java можно командой\n\n• <properties> — используется для определения свойств, которые могут быть использованы в других частях pom.xml\n\n• https://mvn-mirror.gitverse.ru — список зависимостей проекта, здесь подключется maven-пакет через зеркало . Ключевая зависимость проекта\n\n• <build> — определяет конфигурацию сборки проекта\n\nСекция <build> в pom.xml\n\nmaven-jar-plugin используется для создания JAR-файла из результатов компиляции проекта. Он упаковывает классы, ресурсы и метаданные в стандартный JAR-формат\n\n<plugin>\n\n<groupId>org.apache.maven.plugins</groupId>\n\n<artifactId>maven-jar-plugin</artifactId>\n\n<version>3.3.0</version>\n\n<configuration>\n\n<archive>\n\n<manifest>\n\n<addClasspath>true</addClasspath>\n\n<mainClass>ru.gitverse.tutorials.jsonexample.JsonExample</mainClass>\n\n</manifest>\n\n</archive>\n\n</configuration>\n\n</plugin>\n\nmaven-compiler-plugin отвечает за компиляцию исходного кода Java в байт-код. Он позволяет настроить уровень совместимости Java, оптимизацию компиляции и другие параметры\n\n<plugin>\n\n<groupId>org.apache.maven.plugins</groupId>\n\n<artifactId>maven-compiler-plugin</artifactId>\n\n<version>3.11.0</version>\n\n<configuration>\n\n<source>11</source>\n\n<target>11</target>\n\n</configuration>\n\n</plugin>\n\nmaven-shade-plugin используется для создания «толстых» JAR-файлов (fat JAR), которые включают все необходимые зависимости. Он объединяет классы и ресурсы из зависимостей в один JAR-файл\n\n<plugin>\n\n<groupId>org.apache.maven.plugins</groupId>\n\n<artifactId>maven-shade-plugin</artifactId>\n\n<version>3.6.0</version>\n\n<configuration>\n\n<!-- put your configurations here -->\n\n</configuration>\n\n<executions>\n\n<execution>\n\n<phase>package</phase>\n\n<goals>\n\n<goal>shade</goal>\n\n</goals>\n\n</execution>\n\n</executions>\n\n</plugin>\n\nexec-maven-plugin позволяет запускать исполняемые классы непосредственно из командной строки Maven ( mvn compile exec:java ). Он полезен для тестирования и отладки приложений без необходимости запуска их отдельно\n\n<plugin>\n\n<groupId>org.codehaus.mojo</groupId>\n\n<artifactId>exec-maven-plugin</artifactId>\n\n<version>3.5.0</version>\n\n<configuration>\n\n<mainClass>ru.gitverse.tutorials.jsonexample.JsonExample</mainClass>\n\n</configuration>\n\n</plugin>\n\nsettings.xml\n\nФайл приведен для примера подключения зеркала https://npm-mirror.gitverse.ru . Секции зеркала и профиля следует указать settings.xml , уже существующем на в вашей операционной системе. Если файла нет, его следует создать\n\nРасположение файла settings.xml\n\n• c:\\Users\\<YourUsername>\\.m2\\settings.xml для Windows —\n\n• для MacOS и Linux — (домашняя директория пользователя)\n\nКод файла settings.xml\n\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<settings>\n\n<!-- Секция mirrors -->\n\n<mirrors>\n\n<mirror>\n\n<id>mvn-mirror</id>\n\n<name>GitVerse Maven Mirror</name>\n\n<url>https://mvn-mirror.gitverse.ru</url>\n\n<mirrorOf>*</mirrorOf>\n\n</mirror>\n\n</mirrors>\n\n<profiles>\n\n<profile>\n\n<id>gitverse</id>\n\n<repositories>\n\n<repository>\n\n<id>mvn-mirror</id>\n\n<url>https://mvn-mirror.gitverse.ru</url>\n\n<releases><enabled>true</enabled></releases>\n\n<snapshots><enabled>true</enabled></snapshots>\n\n</repository>",
+        "metadata": {
+            "source_file": "GitVerse_Хранение_All_V2.docx",
+            "section": [
+                "Хранение артефактов"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "api",
+                "ui",
+                "registry",
+                "storage",
+                "maven",
+                "configuration",
+                "artifacts",
+                "config",
+                "docker",
+                "packages"
+            ]
+        }
+    },
+    {
+        "content": "</repositories>\n\n<pluginRepositories>\n\n<pluginRepository>\n\n<id>mvn-mirror</id>\n\n<url>https://mvn-mirror.gitverse.ru</url>\n\n<releases><enabled>true</enabled></releases>\n\n<snapshots><enabled>true</enabled></snapshots>\n\n</pluginRepository>\n\n</pluginRepositories>\n\n</profile>\n\n</profiles>\n\n<!-- Секция активации профиля -->\n\n<activeProfiles>\n\n<activeProfile>gitverse</activeProfile>\n\n</activeProfiles>\n\n</settings>\n\nJsonExample.java\n\nКласс JsonExample.java является точкой входа программы и содержит основной метод main() , который запускается при выполнении программы\n\nВ коде подключается пакет пакет com.fasterxml.jackson , класс ObjectMapper которого преобразовывает формат JSON в объекты Java и наоборот. Результаты сериализации и десериализации выводятся в консоль\n\nJSON задается в двух местах\n\n1. Временно в процессе сериализации в первой части кода в строке\n\nString jsonString = mapper.writeValueAsString(person);\n\n1. В предопределенной строке во второй части кода\n\nString json = \"{\\\"name\\\":\\\"Jane Smith\\\", \\\"age\\\": 25}\";\n\nКод файла JsonExample.java\n\npackage ru.gitverse.tutorials.jsonexample;\n\nimport com.fasterxml.jackson.databind.ObjectMapper;\n\npublic class JsonExample {\n\npublic static void main(String[] args) throws Exception\n\n{\n\nObjectMapper mapper = new ObjectMapper();\n\n// Serialize a Java object to JSON\n\nPerson person = new Person(\"Jane Smith\", 25);\n\nString jsonString = mapper.writeValueAsString(person);\n\nSystem.out.println(jsonString);\n\n// Deserialize a JSON string to a Java object\n\nString json = \"{\\\"name\\\":\\\"Jane Smith\\\", \\\"age\\\": 25}\";\n\nPerson deserializedPerson = mapper.readValue(json, Person.class);\n\nSystem.out.println(deserializedPerson.getName() + \", \" + deserializedPerson.getAge());\n\n}\n\nstatic class Person {\n\npublic String name;\n\npublic int age;\n\npublic Person() {\n\n// Optionally, initialize default values for name and age here\n\n}\n\npublic Person(String name, int age) {\n\nthis.name = name;\n\nthis.age = age;\n\n}\n\npublic String getName() {\n\nreturn this.name;\n\n}\n\npublic void setName(String name) {\n\nthis.name = name;\n\n}\n\npublic int getAge() {\n\nreturn this.age;\n\n}\n\npublic void setAge(int age) {\n\nthis.age = age;;\n\n}\n\n}\n\n}\n\nПояснения\n\n• mapper создается объект под названием . Этот объект используется для работы с данными JSON\n\n• Person создается объект с именем person и определенными значениями имени и возраста\n\n• mapper.writeValueAsString(person) объект сериализуется (преобразуется) в с помощью метода\n\n• System.out.println(jsonString); выводится в консоль с помощью\n\n• сериализация (преобразование объекта в JSON)\n\n• Person определяется строка с уже существующим представлением объекта в формате JSON\n\n• json объект десериализаует строку\n\n• System.out.println(deserializedPerson.name + \", \" + deserializedPerson.age); десериализованный объект выводится в консоль с помощью\n\n• десериализация (преобразование JSON в объект)\n\n• name — строковая переменная для хранения имени человека\n\n• age — целочисленная переменная для хранения возраста человека\n\n• имеет два приватных поля\n\n• конструктор по умолчанию без аргументов\n\n• age Конструктор, принимающий аргументы (строка) и (целое число)\n\n• имеет два конструктора\n\n• setAge() содержит методы и для доступа к полю name, а также методы и для доступа к полю age\n\nКаталог target\n\nКаталог target создается автоматически при выполнении команд сборки и очистки проекта, например\n\n• mvn package — компилирует исходный код, выполняет тесты и упаковывает проект в JAR- или WAR-файл. Скомпилированные классы, ресурсы и итоговый артефакт помещаются в каталог\n\n• mvn clean — yдаляет все содержимое каталога\n\n• mvn clean package — последовательно выполняет очистку и сборку проекта\n\nЗапуск и проверка кода\n\nЗапуск кода должен показать результат сериализации объекта в JSON и на следующей строке результат обратной операции\n\n{\"name\":\"Jane Smith\",\"age\":25}\n\nJane Smith, 25\n\nКомпиляция и выполнение\n\nКомпиляция и выполнение командой mvn compile exec:java для быстрого запуска и тестирования\n\n$ mvn compile exec:java\n\n...",
+        "metadata": {
+            "source_file": "GitVerse_Хранение_All_V2.docx",
+            "section": [
+                "Хранение артефактов"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "api",
+                "ui",
+                "registry",
+                "storage",
+                "maven",
+                "configuration",
+                "artifacts",
+                "config",
+                "docker",
+                "packages"
+            ]
+        }
+    },
+    {
+        "content": "[INFO] --- exec-maven-plugin:3.5.0:java (default-cli) @ jsonexample ---\n\n{\"name\":\"Jane Smith\",\"age\":25}\n\nJane Smith, 25\n\n[INFO] ------------------------------------------------------------------------\n\n[INFO] BUILD SUCCESS\n\n[INFO] ------------------------------------------------------------------------\n\n[INFO] Total time: 1.076 s\n\n[INFO] Finished at: 2024-11-25T20:40:42+03:00\n\n[INFO] ------------------------------------------------------------------------\n\nСборка и выполнение JAR-файла\n\nКоманда для сборки и JAR-файла\n\nmvn clean package && java -jar target/jsonexample-1.0-SNAPSHOT.jar\n\nВы должны увидеть в консоли\n\n$ mvn clean package && java -jar target/jsonexample-1.0-SNAPSHOT.jar\n\n...\n\n{\"name\":\"Jane Smith\",\"age\":25}\n\nJane Smith, 25\n\nЗеркало NPM\n\nhttps://npm-mirror.gitverse.ru является зеркалом https://www.npmjs.com/ (opens in a new tab) . GitVerse не несет ответственности за содержимое пакетов, пакеты зеркалируются с указанного источника и поставляются как есть\n\nСервис доступен в режиме Beta , соглашение об уровне сервиса (SLA) уточняется\n\nПодключение зеркала\n\nНиже представлены различные варианты подключения зеркала npm\n\nnpm install\n\nnpm install --registry=https://npm-mirror.gitverse.ru\n\nПросмотр текущих настроек\n\nnpm config get registry\n\nСброс настроек\n\nnpm config set registry https://npm-mirror.gitverse.ru\n\nПодключения зеркала через файл .npmrc\n\n1. Создайте файл .npmrc в корневом каталоге вашего проекта или в домашнем каталоге пользователя\n\n2. Добавьте следующую строку в файл\n\nregistry=https://npm-mirror.gitverse.ru\n\nЧерез переменную окружения\n\nexport npm_config_registry=https://npm-mirror.gitverse.ru\n\nДополнительные настройки\n\nПрокси-сервер\n\nЕсли вы находитесь за корпоративным или домашним прокси-сервером, то для доступа к внешним ресурсам, включая npm-зеркала, необходимо указать настройки прокси в вашем конфигурационном файле npm. Это позволит вашим запросам проходить через прокси-сервер\n\n1. Найдите файл .npmrc: Обычно он находится в корневом каталоге вашего домашнего каталога или в корневом каталоге проекта\n\n2. Добавьте следующие строки\n\nЗамените http://your_proxy_server:port на фактический URL вашего прокси-сервера с указанием порта\n\nproxy=http://your_proxy_server:port\n\nhttps-proxy=http://your_proxy_server:port\n\n3. Если ваш прокси требует аутентификации, добавьте следующие строки: proxy-auth=username:password https-proxy-auth=username:password\n\n4. no_proxy: Если есть домены, которые не должны проходить через прокси, их можно указать в параметре no_proxy. Например\n\nno_proxy=localhost,127.0.0.1,.local\n\nПример подключения зеркала в веб-сервисе\n\nНастоящий проект доступен в репозитории GitVerse, в ветке npm-mirror (opens in a new tab) , он демонстрирует подключение и установку через зеркало https://npm-mirror.gitverse.ru зависимостей для простейшего веб-приложения, реализующего функционал списка дел (To-Do List)\n\nПодготовительные действия\n\nДля запуска кода JavaScript требуется менеджер пакетов npm и платформа для запуска Node.js\n\n1. Установка npm\n\nsudo apt install npm\n\n1. Установка Node.js\n\nsudo apt install nodejs\n\nСтруктура проекта\n\ngitverse-registry-mirrors/\n\n├── .gitignore\n\n├── .npmrc\n\n├── index.js\n\n├── package.json\n\n├── package-lock.json\n\n├── node_modules/\n\n├── public/\n\n│ ├── index.html\n\n│ └── script.js\n\n.gitignore\n\nОбычно рекомендуется папку node_modules добавлять в .gitignore\n\nКод .gitignore\n\nnode_modules/\n\n.npmrc\n\n.npmrc — это конфигурационный файл, используемый менеджером пакетов npm для настройки различных параметров\n\nДобавьте в файл .npmrc gitverse зеркало\n\nregistry=https://npm-mirror.gitverse.ru\n\nТеперь вы можете использовать стандартную команду npm install для загрузки пакетов через зеркало https://npm-mirror.gitverse.ru\n\nnpm install local-storage\n\nindex.js\n\nГлавный файл в проекте на Node.js. Он служит точкой входа для запуска приложения. Интерпретатор Node.js начинает исполнение кода с этого файла\n\nКод файла index.js\n\n// Импорт модулей\n\nconst express = require('express');\n\nconst path = require('path');",
+        "metadata": {
+            "source_file": "GitVerse_Хранение_All_V2.docx",
+            "section": [
+                "Хранение артефактов"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "api",
+                "ui",
+                "registry",
+                "storage",
+                "maven",
+                "configuration",
+                "artifacts",
+                "config",
+                "docker",
+                "packages"
+            ]
+        }
+    },
+    {
+        "content": "// Создание приложения\n\nconst app = express();\n\nconst port = 3000;\n\n// Настройка статических файлов\n\napp.use(express.static('public'));\n\n// Запуск сервера\n\napp.listen(port, () => {\n\nconsole.log(`Server listening on port ${port}`);\n\n});\n\nПояснение к коду файла index.js\n\nИмпорт модулей\n\n• Express.js — импортируется фреймворк , который используется для создания веб-приложений\n\n• path — импортируется модуль для работы с путями к файлам\n\nСоздание приложения\n\n• const app = express(); — cоздается экземпляр приложения Express.js\n\nНастройка статических файлов\n\n• app.use(express.static('public')); — настраивается middleware для обслуживания статических файлов из папки public. Это позволяет пользователям загружать HTML, CSS, JavaScript и другие файлы напрямую из браузера\n\nЗапуск сервера\n\n• app.listen(port, () => { ... }); — запускается сервер на указанном порту (в данном случае, 3000). Когда сервер успешно запущен, в консоль выводится сообщение\n\npackage.json\n\nДанный файл\n\n• содержит в формате JSON метаданные проекта, диапазон версий зависимостей\n\n• -y генерируется командой , флаг используется для автоматического принятия всех значений по умолчанию при создании файла\n\nОтройте файл и пропишите в нем\n\n• в разделе dependencies — пакет и фреймворк\n\n\"dependencies\": {\n\n\"express\": \"^4.21.1\",\n\n\"local-storage\": \"^1.4.2\"\n\n}\n\n• в разделе scripts — скрипт запуска файла\n\n\"scripts\": {\n\n\"start\": \"node index.js\"\n\n},\n\nРезультирующий код файла package.json\n\n{\n\n\"name\": \"gitverse-mirror-example\",\n\n\"version\": \"1.0.0\",\n\n\"description\": \"In the example project, the package name we use from npm is local-storage.\",\n\n\"main\": \"index.js\",\n\n\"scripts\": {\n\n\"start\": \"node index.js\"\n\n},\n\n\"keywords\": [],\n\n\"author\": \"\",\n\n\"license\": \"ISC\",\n\n\"dependencies\": {\n\n\"express\": \"^4.21.1\",\n\n\"local-storage\": \"^1.4.2\"\n\n}\n\n}\n\nОписание полей файла package.json\n\npackage-lock.json\n\nФайл создается автоматический при установке зависимостей, в нем фиксируются точные данные, версии скачанных зависимостей\n\nnode_modules\n\nКаталог создается автоматический при установки зависимостей, в нем хранятся скачанные зависимости\n\nindex.html\n\nКод создает базовую структуру HTML-страницы приложения\n\nКод файла index.html\n\n<!DOCTYPE html>\n\n<html lang=\"en\">\n\n<head>\n\n<meta charset=\"UTF-8\">\n\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n\n<title>To-Do List</title>\n\n</head>\n\n<body>\n\n<h1>To-Do List</h1>\n\n<input type=\"text\" id=\"new-todo\" placeholder=\"Add a new todo\">\n\n<button id=\"add-todo-btn\">Add</button>\n\n<ul id=\"todo-list\"></ul>\n\n<script src=\"script.js\"></script>\n\n</body>\n\n</html>\n\nПояснение к коду файла index.html\n\n1. Структура документа\n\n• <!DOCTYPE html> — объявляет тип документа как HTML5\n\n• <html lang=\"en\"> — корневой элемент HTML-документа, устанавливает язык содержимого на английский\n\n1. Головной раздел ( <head> ): <meta charset=\"UTF-8\"> — устанавливает кодировку символов UTF-8 для корректного отображения текста; <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"> — оптимизирует отображение страницы на разных устройствах, устанавливая ширину области просмотра равной ширине устройства и начальный масштаб равным 1; <title>To-Do List</title> — Задает заголовок страницы, который отображается в браузере\n\n2. Тело документа ( <body> )\n\n• <h1>To-Do List</h1> — заголовок первого уровня для обозначения списка дел\n\n• <input type=\"text\" id=\"new-todo\" placeholder=\"Add a new todo\"> — поле ввода текста для добавления нового дела. Идентификатор new-todo используется для доступа к этому элементу в JavaScript\n\n• <button id=\"add-todo-btn\">Add</button> — кнопка для добавления нового дела в список. Идентификатор add-todo-btn используется для доступа к этой кнопке в JavaScript\n\n• <ul id=\"todo-list\"></ul> — неупорядоченный список для отображения добавленных дел. Идентификатор todo-list используется для доступа к этому списку в JavaScript\n\n• <script src=\"script.js\"></script> — подключает внешний файл , где будет реализована функциональность приложения\n\nscripts.js",
+        "metadata": {
+            "source_file": "GitVerse_Хранение_All_V2.docx",
+            "section": [
+                "Хранение артефактов"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "api",
+                "ui",
+                "registry",
+                "storage",
+                "maven",
+                "configuration",
+                "artifacts",
+                "config",
+                "docker",
+                "packages"
+            ]
+        }
+    },
+    {
+        "content": "Код реализует в приложении функциональность добавления новых дел, сохранения их в локальном хранилище и отображения на странице, взаимодействуя с элементами HTML-страницы, описанными в файле index.html\n\nКод файла scripts.js\n\n// 1. Получение элементов DOM\n\nconst todoList = document.getElementById(\"todo-list\");\n\nconst newTodoInput = document.getElementById(\"new-todo\");\n\nconst addTodoBtn = document.getElementById(\"add-todo-btn\");\n\n// 2. Проверка, поддерживается ли локальное хранилище в браузере\n\nconst storage = window.localStorage;\n\n// 3. функция получения списка существующих дел из локального хранилища\n\nfunction getTodos() {\n\nlet todos;\n\nif (storage.getItem(\"todos\")) {\n\ntodos = JSON.parse(storage.getItem(\"todos\"));\n\n} else {\n\ntodos = [];\n\n}\n\nreturn todos;\n\n}\n\n// 4. Сохранение списка дел в локальном хранилище\n\nfunction setTodos(todos) {\n\nstorage.setItem(\"todos\", JSON.stringify(todos));\n\n}\n\n// 5. Отображения списка дел на странице\n\nfunction displayTodos(todos) {\n\ntodoList.innerHTML = \"\"; // Clear the list before displaying\n\ntodos.forEach((todo) => {\n\nconst listItem = document.createElement(\"li\");\n\nlistItem.textContent = todo;\n\ntodoList.appendChild(listItem);\n\n});\n\n}\n\n// 6. Добавление нового дела\n\nfunction addTodo() {\n\nconst newTodoValue = newTodoInput.value.trim();\n\nif (!newTodoValue) return; // Don't add empty tasks\n\nconst todos = getTodos();\n\ntodos.push(newTodoValue);\n\nsetTodos(todos);\n\ndisplayTodos(todos);\n\nnewTodoInput.value = \"\"; // Clear the input field\n\n}\n\n// 7. Инициализацию приложения при загрузке страницы\n\nconst todos = getTodos();\n\ndisplayTodos(todos);\n\n// 8. Добавление addEventListener на кнопку addTodoBtn\n\naddTodoBtn.addEventListener(\"click\", addTodo);\n\nПояснение к коду файла scripts.js\n\n1. Получение элементов DOM\n\n• <ul> получает ссылку на элемент с идентификатором todo-list\n\n• <input> получает ссылку на элемент с идентификатором new-todo\n\n• <button> получает ссылку на элемент с идентификатором add-todo-btn\n\n1. Проверка, поддерживается ли локальное хранилище в браузере\n\n• window.localStorage обращается к объекту localStorage глобального объекта window. Этот объект позволяет веб-приложениям хранить данные пользователя на его компьютере. Если локальное хранилище доступно, то переменная storage будет содержать ссылку на этот объект. В дальнейшем, код может использовать его для сохранения и извлечения данных, таких как список дел, настройки пользователя и другие\n\n1. функция получения списка существующих дел из локального хранилища\n\n1. Сохранение списка дел в локальном хранилище\n\n1. Отображения списка дел на странице\n\n1. Добавление нового дела\n\n1. Инициализацию приложения при загрузке страницы\n\n1. Добавление addEventListener на кнопку addTodoBtn\n\nУстановка зависимостей\n\nЕсли вы прописали в фале .npmrc зеркало registry=https://npm-mirror.gitverse.ru , то для установки зависимостей достаточно команды npm install\n\nДля установки через зеркало всех пакетов, указанных в файле package.json , также можно использовать флаг --registry=https://npm-mirror.gitverse.ru\n\nnpm install --registry=https://npm-mirror.gitverse.ru\n\nВ результате появятся\n\n• файл , где фиксирует точные данные скаченных зависимостей\n\n• каталог со скаченными зависимостями\n\nЕсли вы добавили в файл .gitignore строку в node_modules , то каталог node_modules не будет отслеживаться и включаться в историю изменений проекта\n\nЗапуск и проверка проекта\n\nДля проверки проекта\n\n1. Запустите сервер командой npm run start в терминале\n\n2. Откройте в браузере страницу http://localhost:3000 , которая ранее была указана в файле index.js\n\nПрекращение работы сервера\n\nДля прекращения работы сервера нажмите в терминале сочетание клавиш Ctrl + C\n\nЗеркало Docker Hub\n\n30 мая сервис Docker Hub закрыл доступ для российских пользователей\n\nСообщение о блокировке https://hub.docker.com/ (opens in a new tab) от 30 мая 2024 года\n\n403 Forbidden\n\nSince Docker is a US company, we must comply with US export control regulations.",
+        "metadata": {
+            "source_file": "GitVerse_Хранение_All_V2.docx",
+            "section": [
+                "Хранение артефактов"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "api",
+                "ui",
+                "registry",
+                "storage",
+                "maven",
+                "configuration",
+                "artifacts",
+                "config",
+                "docker",
+                "packages"
+            ]
+        }
+    },
+    {
+        "content": "In an effort to comply with these, we now block all IP addresses that are located\n\nin Cuba, Iran, North Korea, Republic of Crimea, Sudan, and Syria. If you are not\n\nin one of these cities, countries, or regions and are blocked, please reach out\n\nto https://hub.docker.com/support/contact/\n\nДля пользователей GitVerse стало доступно российское зеркало Docker Hub\n\ndh-mirror.gitverse.ru является зеркалом Docker Hub. Мы не несем ответственность за содержимое образов, образы зеркалируются и поставляются как есть\n\nКонфигурирование Docker\n\n1. Для настройки докера требуется добавить в соответствующий конфигурационный файл строку\n\n{ \"registry-mirrors\" : [ \"https://dh-mirror.gitverse.ru\" ] }\n\n1.1. Linux с правами root - /etc/docker/daemon.json\n\n1.2. Linux без прав root - ~/.config/docker/daemon.json\n\n1.3. Mac OS - ~/.docker/daemon.json\n\n1.4. Windows OC - C:\\ProgramData\\docker\\config\\daemon.json\n\n1.5. Docker Desktop - в Preferences -> Docker engine\n\n2. Для вступления изменения в силу в ОС linux выполните команду\n\nsystemctl reload docker\n\nКонфигурирование Docker совместно со Snap\n\nЗеркало dh-mirror.gitverse.ru задаётся в файле colima.yaml , в котором следует заменить docker:{} на следующий код\n\ndocker:\n\nregistry-mirrors:\n\n- https://dh-mirror.gitverse.ru\n\nРасположение colima.yaml\n\nРасположение colima.yaml для различных ОС\n\n1. для macOS - ~/.colima/default/colima.yaml\n\n2. для Linux - ~/.config/colima/default/colima.yaml\n\nИзменения в конфигурации по умолчанию не вступят в силу до тех пор, пока вы не перезапустите Colima с помощью команды colima start\n\nИзменения в конфигурации при запуске Colima с параметром --edit\n\nТакже файл colima.yaml можно отредактировать при запуске Colima с параметром --edit\n\n1. В командной строке выполните\n\nОткроется файл colima.yaml в редакторе по умолчанию\n\ncolima start --edit\n\n2. Замените docker:{} на следующий код\n\nСохраните изменения, далее запустится ВМ Colima\n\ndocker:\n\nregistry-mirrors:\n\n- https://dh-mirror.gitverse.ru\n\nЗагрузка Docker образа из командной строки\n\n1. Введите команду загрузки нужного образа\n\nгде\n\nДождитесь окончания загрузки образа\n\ndocker pull dh-mirror.gitverse.ru/<image-name>:<tag>\n\n1.1. <image-name> - имя нужного образа\n\n1.2. <tag> - (необязательно) тег вашего образа\n\n2. После загрузки образ будет доступен на вашей локальной машине\n\nКонфигурирование Podman\n\nДля настройки Podman требуется добавить в соответствующий конфигурационный файл строку\n\n[[registry]]\n\nprefix = \"docker.io\"\n\nlocation = \"dh-mirror.gitverse.ru\"\n\ninsecure = true\n\nПример команды загрузки образа Ubuntu с тегом \"jammy\" из реестра образов на вашу локальную машину, используя Podman\n\npodman pull ubuntu:jammy",
+        "metadata": {
+            "source_file": "GitVerse_Хранение_All_V2.docx",
+            "section": [
+                "Хранение артефактов"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "api",
+                "ui",
+                "registry",
+                "storage",
+                "maven",
+                "configuration",
+                "artifacts",
+                "config",
+                "docker",
+                "packages"
+            ]
+        }
+    }
+]

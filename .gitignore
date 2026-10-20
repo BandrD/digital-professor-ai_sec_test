@@ -1,0 +1,28 @@
+.env
+venv/
+ENV/
+env/
+# Игнорировать папки виртуальных окружений
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Игнорировать пайкеш и скомпилированные Python-файлы
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Игнорировать локальные настройки IDE (опционально)
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Chroma Vector Database
+chroma_db/
+.chroma/
+chroma/

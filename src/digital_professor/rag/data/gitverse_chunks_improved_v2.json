@@ -1,0 +1,1319 @@
+[
+    {
+        "content": "Регистрация и запуск раннеров",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Регистрация и запуск раннеров"
+            ],
+            "type": [
+                "описание"
+            ],
+            "topic": [
+                "runner"
+            ]
+        }
+    },
+    {
+        "content": "Подготовительные действия\n\nУстановите docker , скачайте раннер и настройте demo.yaml файл конфигурации CI/CD\n\nДля проверки примеров CI/CD с конфигурацией demo.yaml доступен репозиторий CICD_examples, ветка demo  , в нем\n\n• подготовлен файл конфигурации\n\n• act_runner загружен раннер\n\nКонфигурация demo.yaml\n\nФайл demo.yaml следует расположить в директории .gitverse/workflows/ вашего проекта, он определяет конфигурацию работы CI/CD для GitVerse\n\n<code>\n\nname: Демонстрация GitVerse CI/CD\n\non:\n\npush:\n\njobs:\n\nbuild-test:\n\nname: Test context\n\nruns-on: ubuntu-latest\n\nsteps:\n\n- name: Display event name\n\nrun: echo ${{ gitverse.event_name }}\n\n- name: Display Workflow\n\nrun: echo ${{ gitverse.workflow }}\n\n- name: Display repository name\n\nrun: echo ${{ gitverse.Repository}}\n\n- name: Display repository owner\n\nrun: echo ${{ gitverse.repository_owner }}\n\n- name: Display actor\n\nrun: echo ${{ gitverse.actor }}\n\n</code>\n\nСтруктура\n\n<code>\n\n• name: Название конфигурации CI/CD - \"Демонстрация GitVerse CI/CD\"\n\n• push В данном случае, это событие\n\n• on: Определяет события, на которые реагирует CI/CD\n\n• name: Test context Название задачи\n\n• runs-on: ubuntu-latest Определяет операционную систему, на которой будет выполняться задача\n\n• name: Название шага\n\n• run: Команда, которую нужно выполнить в рамках шага, используя переменные окружения GitVerse, такие как gitverse.event_name, gitverse.workflow, gitverse.Repository, gitverse.repository_owner, gitverse.actor\n\n• steps: Список шагов, которые нужно выполнить в рамках задачи. Каждый шаг имеет\n\n• build-test:\n\n• jobs: Определяет список задач, которые нужно выполнить\n\n</code>\n\nКаждый шаг выполняет команду echo для вывода соответствующей переменной окружения GitVerse\n\n1. Display event name. Команда echo ${{ gitverse.event_name }} выводит значение переменной event_name из переменных окружения GitVerse\n\n2. Display Workflow. Команда echo ${{ gitverse.workflow }} выводит значение переменной workflow из переменных окружения GitVerse\n\n3. Display repository name. Команда echo ${{ gitverse.Repository }} выводит значение переменной Repository из переменных окружения GitVerse\n\n4. Display repository owner. Команда echo ${{ gitverse.repository_owner }} выводит значение переменной repository_owner из переменных окружения GitVerse\n\n5. Display actor. Команда echo ${{ gitverse.actor }} выводит значение переменной actor из переменных окружения GitVerse",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Подготовительные действия"
+            ],
+            "type": [
+                "конфигурация"
+            ],
+            "topic": [
+                "ci/cd",
+                "workflow",
+                "yaml",
+                "branch",
+                "runner",
+                "configuration",
+                "setup",
+                "docker"
+            ]
+        }
+    },
+    {
+        "content": "Установка Docker (Ubuntu)",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Установка Docker"
+            ],
+            "type": [
+                "описание"
+            ],
+            "topic": [
+                "setup",
+                "docker"
+            ]
+        }
+    },
+    {
+        "content": "Установка Docker может потребовать от вас рутовых прав\n\n1. Обновите индекс пакета apt\n\nsudo apt update\n\n2. Установите пакеты, позволяющие apt использовать репозиторий через HTTPS\n\nsudo apt install apt-transport-https ca-certificates curl software-properties-common\n\n3. Добавьте открытый ключ GPG Docker\n\ncurl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -\n\n4. Установите стабильный репозиторий\n\nsudo add-apt-repository \"deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\"\n\n5. Повторно обновите индекс пакета apt\n\nsudo apt update\n\n6. Установите Docker\n\nsudo apt install docker-ce\n\n7. Запустить службу Docker\n\nПроверьте версию докера\n\nПроверьте, что докер исполняется\n\n<code>\n\nsudo systemctl start docker\n\n$ sudo docker --version\n\nDocker version 27.1.1, build 6312585\n\n$ sudo systemctl status docker\n\ndocker.service - Docker Application Container Engine\n\nLoaded: loaded (/lib/systemd/system/docker.service; enabled; vendor preset: enabled)\n\n…\n\n</code>\n\nЗапуск раннеров",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Установка Docker"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "docker",
+                "setup",
+                "runner"
+            ]
+        }
+    },
+    {
+        "content": "Запуск бинарного раннера с интерактивной регистрацией\n\n1. Создайте yaml файл demo.yaml рабочего процесса (workflow) в каталоге .gitverse/workflows/ репозитория\n\n2. Скачайте бинарный файл раннера и поместите раннер в каталог вашего проекта\n\nРаннер работает только с заданиями из репозитория, к которому он привязан\n\n3. Сделайте файл исполняемым и проверьте, что скачанный файл соответствует вашей ОС\n\nУспешным будет ответ вида\n\n<code>\n\nchmod +x act_runner\n\n./act_runner --version\n\nact_runner version 40a6fce\n\n</code>\n\n4. Включите CI/CD в профиле вашего репозитория ( Настройки > Репозиторий > CI/CD > Обновить )\n\n5. Получите регистрационный токен раннера ( Настройки > Раннеры > Добавить раннер >копировать токен)\n\n6. Зарегистрируйте раннер, используя полученный токен\n\nУ вас запросят регистрационный токен, введите его\n\nДалее введите имя раннера\n\n(Необязательно) введите лейбл раннера\n\nПример сообщения об успешной регистрации\n\n<code>\n\n./act_runner register\n\nINFO Registering runner, arch=amd64, os=linux, version=40a6fce.\n\nWARN Runner in user-mode.\n\nINFO Enter the runner token:\n\n<token>\n\nINFO Enter the runner name (if set empty, use hostname: <host name>):\n\ndemo-runner\n\nINFO Enter the runner labels, leave blank to use the default labels (comma-separated, for example, ubuntu-20.04:docker://node:16-bullseye,ubuntu-18.04:docker://node:16-buster,linux_arm:host):\n\nrunnerlabel\n\nINFO Registering runner, name=demo-runner, instance=https://gitverse.ru/sc, labels=[runnerlabel].\n\nDEBU Successfully pinged the GitVerse instance server\n\nINFO Runner registered successfully.\n\n</code>\n\n7. После регистрации раннер отобразится со статусом \"Недоступен\" ( Профиль репозитория > Настройки > Раннеры )\n\n8. Запустите службу Docker\n\nПроверьте версию докера\n\nПроверьте, что докер исполняется\n\n<code>\n\nsudo systemctl start docker\n\n$ sudo docker --version\n\nDocker version 27.1.1, build 6312585\n\n$ sudo systemctl status docker\n\ndocker.service - Docker Application Container Engine\n\nLoaded: loaded (/lib/systemd/system/docker.service; enabled; vendor preset: enabled)\n\n…\n\n</code>\n\n9. Запустите раннер\n\nПример сообщения об успешном запуске\n\nsudo ./act_runner daemon\n\nINFO[0000] Starting runner daemon",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Запуск раннера в Docker контейнере"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "ci/cd",
+                "workflow",
+                "secrets",
+                "yaml",
+                "runner",
+                "configuration",
+                "setup",
+                "docker"
+            ]
+        }
+    },
+    {
+        "content": "10. Статус раннера изменится после запуска ( Профиль репозитория > Настройки > Раннеры )\n\n11. Внесите изменения в репозиторий, чтобы раннер среагировал на событие push\n\n12. В профиле репозитория на вкладке CI/CD отразится выполненная работа по данному коммиту\n\nКликните на задачу, чтобы посмотреть детали",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Получение токена и запуск раннера"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "ci/cd",
+                "workflow",
+                "runner",
+                "configuration",
+                "setup"
+            ]
+        }
+    },
+    {
+        "content": "Запуск бинарного раннера на виртуальной машине cloud.ru\n\n1. Зарегистрируйтесь/войдите на cloud.ru и создайте виртуальную машину\n\n2. Подключитесь к ВМ по SSH\n\nОтобразится сообщение об успешном соединении. После установления соединения по SSH, вы сможете взаимодействовать с ВМ через командную строку для выполнения команд и управления сервером\n\nЛогин и публичный IP для подключения к ВМ можно посмотреть в настройках данной ВМ, нажмите на ВМ\n\nНа открывшейся странице отображены нужные для подключения по SSH данные\n\nssh author@194.5.93.199\n\n3. В терминале ВМ создайте ключи SSH и привяжите к аккаунту GitVerse\n\nОтобразится\n\n<code>\n\nssh-keygen -t rsa\n\n$ ssh-keygen -t rsa\n\nGenerating public/private rsa key pair.\n\nEnter file in which to save the key (/home/author/.ssh/id_rsa):\n\nEnter passphrase (empty for no passphrase):\n\nEnter same passphrase again:\n\nYour identification has been saved in /home/author/.ssh/id_rsa\n\nYour public key has been saved in /home/author/.ssh/id_rsa.pub\n\n</code>\n\n4. В консоли ВМ клонируйте репозиторий\n\nsudo git clone ssh://git@gitverse.ru:2222/author/actions-repo.git\n\n5. Зайдите в папку с клонированным проектом\n\ncd ~/Work/actions-repo",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Запуск раннера в Docker контейнере"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "cloud",
+                "runner",
+                "configuration",
+                "setup",
+                "docker"
+            ]
+        }
+    },
+    {
+        "content": "6. Далее выполните действия с первого шага для запуска бинарного раннера с интерактивной регистрацией",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Запуск раннера в Docker контейнере"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "runner"
+            ]
+        }
+    },
+    {
+        "content": "Запуск раннера в Docker контейнере на виртуальной машине cloud.ru\n\n1. Зарегистрируйтесь/войдите на cloud.ru и создайте виртуальную машину (далее - ВМ)\n\n2. Подключитесь к ВМ по SSH  (логин и публичный IP можно посмотреть в настройках данной ВМ)\n\nssh author@194.5.93.199\n\n3. В терминале ВМ создайте ключи SSH и привяжите к аккаунту GitVerse\n\n<code>\n\n$ ssh-keygen -t rsa\n\nGenerating public/private rsa key pair.\n\nEnter file in which to save the key (/home/author/.ssh/id_rsa):\n\nEnter passphrase (empty for no passphrase):\n\nEnter same passphrase again:\n\nYour identification has been saved in /home/author/.ssh/id_rsa\n\nYour public key has been saved in /home/author/.ssh/id_rsa.pub\n\n</code>\n\n4. Клонируйте репозиторий\n\nsudo git clone ssh://git@gitverse.ru:2222/author/actions-repo.git\n\n5. Зайдите в папку с клонированным проектом\n\ncd ~/Work/actions-repo\n\n6. Создайте yaml файл demo.yaml рабочего процесса (workflow) в каталоге .gitverse/workflows/ репозитория\n\n7. Запустите службу Docker\n\nПроверьте версию докера\n\nПроверьте, что докер исполняется\n\n<code>\n\nsudo systemctl start docker\n\n$ sudo docker --version\n\nDocker version 27.1.1, build 6312585\n\n$ sudo systemctl status docker\n\ndocker.service - Docker Application Container Engine\n\nLoaded: loaded (/lib/systemd/system/docker.service; enabled; vendor preset: enabled)\n\n…\n\n</code>\n\n8. Скачайте докер образ раннера\n\nДолжно прийти сообщение вида\n\nsudo docker pull gitverse.ru/gitverse/act-runner:3.0.4\n\n3.0.4: Pulling from gitverse/act-runner\n\n3c854c8cbf46: Pull complete\n\n7d93e3aa1115: Pull complete\n\n6c0aaec6dc7c: Pull complete\n\n0ef879a0db1b: Pull complete\n\nDigest: sha256:28e6ea0f8ecca9cccc5c9cae6022cb9878a948b10413320b5c7546b5cd9533fb\n\nStatus: Downloaded newer image for gitverse.ru/gitverse/act-runner:3.0.4\n\ngitverse.ru/gitverse/act-runner:3.0.4\n\n9. Получите регистрационный токен раннера ( Настройки > Раннеры > Добавить раннер > копировать токен)",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Запуск раннера в Docker контейнере"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "cloud",
+                "workflow",
+                "secrets",
+                "yaml",
+                "runner",
+                "configuration",
+                "setup",
+                "docker"
+            ]
+        }
+    },
+    {
+        "content": "10. Выполните запуск и регистрацию докера в контейнере\n\nДолжно прийти сообщение вида\n\nВ профиле репозитория на вкладке Настройки > Ранеры отобразится новый статус раннера\n\n<code>\n\nsudo docker run \\\n\n-v /var/run/docker.sock:/var/run/docker.sock \\\n\n-e RUNNER_REGISTRATION_TOKEN=aQFelOnS7FqA9eCFUkjSJD06ztdWjk3gaRrSjNVp \\\n\ngitverse.ru/gitverse/act-runner:3.0.4\n\nlevel=info msg=\"Registering runner, arch=amd64, os=linux, version=40a6fce.\"\n\nlevel=debug msg=\"Successfully pinged the GitVerse instance server\"\n\nlevel=info msg=\"Runner registered successfully.\"\n\nSUCCESS\n\ntime=\"2024-04-24T17:23:27Z\" level=info msg=\"Starting runner daemon\"\n\ntime=\"2024-04-24T17:23:28Z\" level=info msg=\"task 1573 repo is author/actions-repo https://github.com https://gitverse.ru/sc\"\n\n</code>\n\n11. Внесите изменения в репозиторий, чтобы раннер среагировал на событие push\n\n12. В профиле репозитория на вкладке CI/CD отразится выполненная работа по данному коммиту\n\nКликните на задачу, чтобы посмотреть детали",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Запуск раннера в Docker контейнере"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "ci/cd",
+                "workflow",
+                "runner",
+                "configuration",
+                "setup",
+                "docker"
+            ]
+        }
+    },
+    {
+        "content": "Запуск раннера в фоновом режиме и запись логов в файл",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Запуск раннера"
+            ],
+            "type": [
+                "описание"
+            ],
+            "topic": [
+                "runner"
+            ]
+        }
+    },
+    {
+        "content": "Для раннера в Docker контейнере",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Запуск раннера в Docker контейнере"
+            ],
+            "type": [
+                "описание"
+            ],
+            "topic": [
+                "docker",
+                "runner"
+            ]
+        }
+    },
+    {
+        "content": "Для запуска раннера в фоновом режиме добавьте в команду опцию -d , а также перенаправление вывода 2>&1 (stdout и stderr) в указанный файл лога. Убедитесь, что у вас есть права на запись в указанный файл лога\n\n<code>\n\nsudo docker run -d \\\n\n-v /var/run/docker.sock:/var/run/docker.sock \\\n\n-e RUNNER_REGISTRATION_TOKEN=TjrvgIS5Vk0jD6C1zd313CiQ3v9KB8OFznzXt2KE \\\n\ngitverse.ru/gitverse/act-runner:3.0.4 > logfile2.log 2>&1\n\n</code>\n\n1. Узнайте идентификатор контейнера, запустив команду\n\nПридет сообщение вида\n\n<code>\n\nsudo docker ps\n\n$ sudo docker ps\n\nCONTAINER ID   IMAGE                                   COMMAND                  CREATED              STATUS              PORTS     NAMES\n\n5f1aca58bf5d   gitverse.ru/gitverse/act-runner:3.0.4   \"/sbin/tini -- /opt/…\"   About a minute ago   Up About a minute zealous_bhabha\n\n</code>\n\n2. Затем используйте команду docker stop с идентификатором контейнера, чтобы его остановить\n\nsudo docker stop 5f1aca58bf5d\n\nДля бинарного раннера\n\nnohup sudo ./act_runner daemon &> ./runner.log &\n\nПояснение\n\n1. nohup - запускает команду, игнорируя сигналы SIGHUP , что позволяет продолжить работу после завершения сеанса пользователя\n\n2. sudo ./act_runner daemon - запускает бинарный файл act_runner в режиме демона с привилегиями суперпользователя\n\n3. &> ./runner.log - перенаправляет стандартный вывод и стандартный вывод ошибок в файл runner.log\n\n4. & - запускает процесс в фоновом режиме\n\nДля прерывания процесса выполните\n\nsudo pkill act_runner\n\nили\n\nsudo pkill <PID>\n\nЧтобы посмотреть запущенные вами процессы выполните\n\nps ux\n\nЧтобы посмотреть все процессы в системе выполните\n\nps aux\n\nОбе команды ps aux и ps ux покажут вам список запущенных процессов, их PID (идентификатор процесса), использование CPU и памяти и другую информацию",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Запуск раннера в Docker контейнере"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "docker",
+                "runner"
+            ]
+        }
+    },
+    {
+        "content": "Использование секретов",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Использование секретов"
+            ],
+            "type": [
+                "описание"
+            ],
+            "topic": [
+                "secrets"
+            ]
+        }
+    },
+    {
+        "content": "Использование секретов",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Использование секретов"
+            ],
+            "type": [
+                "описание"
+            ],
+            "topic": [
+                "secrets"
+            ]
+        }
+    },
+    {
+        "content": "Подготовительные действия\n\nУстановите docker , скачайте раннер и настройте secretsDemo.yaml файл конфигурации CI/CD\n\nДля проверки примеров CI/CD с конфигурацией secretsDemo.yaml доступен репозиторий CICD_examples, ветка secretsDemo  , в нем\n\n• подготовлен файл конфигурации\n\n• act_runner загружен раннер\n\nКонфигурация secretsDemo.yaml\n\nФайл secretsDemo.yaml следует расположить в директории .gitverse/workflows/ вашего проекта, он определяет конфигурацию работы CI/CD для GitVerse\n\n<code>\n\nname: Демо использования секрета в CI/CD\n\non: [push]\n\njobs:\n\nbuild-test:\n\nname: Build & Test\n\nruns-on: ubuntu-latest\n\nsteps:\n\n- if: ${{ secrets.SECRET == 'secret-word' }}\n\nname: Check if secret is correct\n\nrun: echo \"true\"\n\n</code>\n\nСтруктура\n\n• name: Название конфигурации CI/CD - \"Демо использования секрета в CI/CD\"\n\n• on: Определяет события, на которые реагирует CI/CD. В данном случае это событие push\n\n• name: Название задачи - \"Build & Test\"\n\n• runs-on: Определяет операционную систему, на которой будет выполняться задача - \"ubuntu-latest\"\n\n• secret-word if: Условие для выполнения шага. В данном случае, проверяется, равно ли значение секрета строке\n\n• name: Название шага - \"Check if secret is correct\"\n\n• secrets.SECRET == 'secret-word' run: Команда echo \"true\", которая будет выполнена только если условие истинно\n\n• steps: Список шагов, которые нужно выполнить в рамках задачи\n\n• build-test\n\n• jobs: Определяет список задач, которые нужно выполнить\n\nРаннер с проверкой секрета\n\n1. Включите CI/CD в профиле вашего репозитория ( Настройки > Репозиторий > CI/CD > Обновить )\n\n2. Получите регистрационный токен раннера ( Настройки > Раннеры > Добавить раннер > копировать токен )\n\n3. Создайте secretsDemo.yaml в директории .gitverse/workflows/ вашего проекта\n\n4. Сделайте раннер исполняемым и зарегистрируйте его, используя полученный токен\n\nУ вас запросят регистрационный токен, введите его\n\nДалее введите имя раннера\n\n(Необязательно) введите лейбл раннера\n\nСообщение об успешной регистрации\n\n<code>\n\n$sudo chmod +x act_runner\n\n$sudo ./act_runner register\n\nINFO Registering runner, arch=amd64, os=linux, version=40a6fce.\n\nWARN Runner in user-mode.\n\nINFO Enter the runner token:\n\n<token>\n\nINFO Enter the runner name (if set empty, use hostname: <host name>):\n\nsecretsDemo-runner\n\nINFO Enter the runner labels, leave blank to use the default labels (comma-separated, for example, ubuntu-20.04:docker://node:16-bullseye,ubuntu-18.04:docker://node:16-buster,linux_arm:host):\n\nINFO Registering runner, name=secretsDemo-runner, instance=https://gitverse.ru/sc, labels=[ubuntu-latest:docker://node:16-bullseye ubuntu-22.04:docker://node:16-bullseye ubuntu-20.04:docker://node:16-bullseye ubuntu-18.04:docker://node:16-buster].\n\nDEBU Successfully pinged the GitVerse instance server\n\nINFO Runner registered successfully.\n\n</code>\n\n5. Зарегистрированный раннер отобразится со статусом \"Недоступен\" ( Профиль репозитория > Настройки > Раннеры )\n\n6. Добавьте секрет в профиле репозитория ( Настройки > Секреты > Добавить секрет )\n\nЗаполните название секрета и его значение\n\n7. Запустите раннер\n\nsudo ./act_runner daemon\n\n8. Внесите изменения в репозиторий, чтобы раннер среагировал на событие push\n\n9. Выберите данную задачу в профиле репозитория на вкладке Настройки > CI/CD\n\n10. Отобразятся детали\n\nВыполнилось условие secretsDemo.yaml в части содержания секрета, который мы задали вначале\n\n<code>\n\nif: ${{ secrets.SECRET == 'secret-word' }}\n\nname: Check if secret is correct\n\nrun: echo \"true\"\n\n</code>\n\nCI/CD при защите ветки",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Подготовительные действия"
+            ],
+            "type": [
+                "конфигурация"
+            ],
+            "topic": [
+                "ci/cd",
+                "workflow",
+                "secrets",
+                "yaml",
+                "branch",
+                "runner",
+                "configuration",
+                "setup",
+                "docker"
+            ]
+        }
+    },
+    {
+        "content": "Подготовительные действия\n\nУстановите docker , скачайте раннер и настройте CICD_branch_protection_demo.yaml файл конфигурации CI/CD\n\nДля проверки примеров CI/CD с конфигурацией CICD_branch_protection_demo.yaml доступен репозиторий CICD_examples, ветка CICD_branch_protection_demo  , в нем\n\n• подготовлен файл конфигурации\n\n• act_runner загружен раннер\n\nКонфигурация CICD_branch_protection_demo.yaml\n\nФайл CICD_branch_protection_demo.yaml следует расположить в директории .gitverse/workflows/ вашего проекта, он определяет конфигурацию работы CI/CD для GitVerse\n\n<code>\n\nname: Демонстрация защиты ветки\n\non:\n\npull_request:\n\njobs:\n\nbuild-test:\n\nname: CICD branch protection\n\nruns-on: ubuntu-latest\n\nsteps:\n\n- name: Display pull request title\n\nrun: echo ${{ github.event.pull_request.title }}\n\n- name: Display commit message\n\nrun: echo ${{ github.event.head_commit.message }}\n\n- name: Check pull request title\n\nrun: |\n\nif [[ \"${{ github.event.pull_request.title }}\" == *\"TASK-\"* ]]; then\n\necho \"Pull request title contains 'TASK-'\"\n\nelse\n\necho \"Pull request title does not contain 'TASK-'\"\n\nexit 1\n\nfi\n\n</code>\n\nСтруктура",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Подготовительные действия"
+            ],
+            "type": [
+                "конфигурация"
+            ],
+            "topic": [
+                "ci/cd",
+                "workflow",
+                "yaml",
+                "branch",
+                "runner",
+                "configuration",
+                "setup",
+                "docker"
+            ]
+        }
+    },
+    {
+        "content": "• name: Демонстрация защиты ветки - название конфигурации CI/CD\n\n• on: pull_request: - указывает, что конфигурация будет запускаться при событиях pull request\n\n• name: CICD branch protection - название этой конкретной задачи\n\n• runs-on: ubuntu-latest - указывает, что задача будет выполняться на последней версии Ubuntu\n\n• run: echo ${{ github.event.pull_request.title }} - выводит заголовок запроса\n\n• name: Display pull request title - название шага\n\n• run: echo ${{ github.event.head_commit.message }} - выводит сообщение коммита\n\n• name: Display commit message - название шага\n\n• echo \"Pull request title contains 'TASK-'\" - выводится сообщение \"Pull request title contains 'TASK-'\"\n\n• if [[ \"${{ github.event.pull_request.title }}\" == *\"TASK-\"* ]]; then - условие проверяет, содержит ли заголовок запроса слово \"TASK-\".Если содержит, то\n\n• echo \"Pull request title does not contain 'TASK-'\" выводится сообщение \"Pull request title does not contain 'TASK-'\"\n\n• exit 1 - и завершает выполнение с ошибкой\n\n• else - если не содержит, то\n\n• fi - конец условия\n\n• run: | - многострочная команда\n\n• name: Check pull request title - название шага\n\n• steps - шаги, которые нужно выполнить в рамках этой задачи\n\n• build-test:\n\n• jobs: - оределяет список задач, которые нужно выполнить",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Настройка защиты ветки с проверкой статуса"
+            ],
+            "type": [
+                "конфигурация"
+            ],
+            "topic": [
+                "branch",
+                "configuration",
+                "ci/cd",
+                "workflow"
+            ]
+        }
+    },
+    {
+        "content": "Настройка защиты ветки с проверкой статуса\n\n1. В профиле репозитория на вкладке Настройки > Репозиторий включите CI/CD , Запросы на слияние и нажмите Обновить\n\nОтобразятся новые вкладки\n\n2. Создайте новое правило\n\nДалее",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Настройка защиты ветки с проверкой статуса"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "ci/cd",
+                "workflow",
+                "branch",
+                "configuration",
+                "setup",
+                "docker"
+            ]
+        }
+    },
+    {
+        "content": "Получение токена и запуск раннера\n\n1. Создайте токен раннера",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Получение токена и запуск раннера"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "secrets",
+                "runner"
+            ]
+        }
+    },
+    {
+        "content": "2. Запустите раннер. Пример регистрации и запуска раннера в докер контейнере c полученным токеном\n\n<code>\n\nsudo docker run \\\n\n-v /var/run/docker.sock:/var/run/docker.sock \\\n\n-e INSTANCE_URL=https://gitverse.ru/sc/ \\\n\n-e RUNNER_REGISTRATION_TOKEN=IfFghH5STMA6jbAausBUHw4NsVwWabCtd2rpWrTq \\\n\ngitverse.ru/gitverse/act-runner:3.0.4\n\n</code>\n\nСоздание и проверка запроса\n\n1. Для создания запроса перейдите на вкладку Запросы и нажмите Создать новый запрос\n\nЗаполните форму создания запроса\n\n2. Отобразится страница запроса, где слияние недоступно, пока не будет выполнена успешная проверка\n\n3. После успешной проверки слияние станет доступно\n\nПроверка статуса задачи\n\n1. На странице запроса нажмите Подробнее\n\n2. На статусе задачи видно, что сообщение в запросе содержит слово TASK- и поэтому проверка прошла успешно\n\nВывод сообщения из запроса\n\nРезультат проверки",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Запуск раннера в Docker контейнере"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "docker",
+                "secrets",
+                "runner"
+            ]
+        }
+    },
+    {
+        "content": "Java, CI/CD Makefile сборка",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Java, CI/CD Makefile сборка"
+            ],
+            "type": [
+                "описание"
+            ],
+            "topic": [
+                "makefile",
+                "java",
+                "ci/cd",
+                "workflow"
+            ]
+        }
+    },
+    {
+        "content": "В данном разделе рассмотрен пример CI/CD сборки java проекта через Makefile",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "CI/CD сборки Maven проекта"
+            ],
+            "type": [
+                "описание"
+            ],
+            "topic": [
+                "makefile",
+                "java",
+                "ci/cd",
+                "workflow"
+            ]
+        }
+    },
+    {
+        "content": "Смотрите также раздел CI/CD сборки Maven проекта\n\nДля проверки данного примера подготовлена ветка makefile-build в репозитории gitverse_tutorials/CICD_building_projects",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "CI/CD сборки Maven проекта"
+            ],
+            "type": [
+                "пример"
+            ],
+            "topic": [
+                "ci/cd",
+                "workflow",
+                "branch",
+                "maven",
+                "makefile",
+                "setup"
+            ]
+        }
+    },
+    {
+        "content": "Подготовительные действия\n\n1\n\n. С\n\nоздайте репозиторий , например, CICD_building_projects\n\n2\n\n. О\n\nбновите список доступных пакетов\n\nsudo apt update\n\n1\n\n. У\n\nстановите JDK-пакет по умолчанию, который включает в себя компилятор Java\n\nsudo apt install default-jdk\n\nПроверьте, что компилятор установлен\n\njavac -version\n\n1\n\n. С\n\nкачайте раннер и сделайте его исполняемым\n\nchmod +x act_runner\n\n1\n\n. У\n\nстановите docker\n\n2\n\n. В\n\nключите CI/CD в настройках вашего репозитория\n\nMain.java\n\nСоздайте файл Main.java с кодом\n\npublic class Main {\n\npublic static void main(String[] args) {\n\nSystem.out.println(\"Hello, World!\");\n\n}\n\n}\n\nПроверьте, что программа исполняется\n\nЗапустите файл Main.java без предварительной компиляции, используя интерпретатор Java (java)\n\nПример успешного выполнения\n\n$ java Main.java\n\nHello, World!\n\nMakefile\n\nСоздайте Makefile , который содержит инструкции для сборки проекта или программы с помощью утилиты make\n\n<code>\n\n# Define compiler\n\nCC = javac\n\n# Define target directory\n\nTARGET_DIR = target\n\n# Define target\n\nTARGET = $(TARGET_DIR)/Main\n\nall: $(TARGET)\n\n$(TARGET): Main.java\n\nmkdir -p $(TARGET_DIR)\n\n$(CC) -d $(TARGET_DIR) Main.java\n\nclean:\n\nrm -rf $(TARGET_DIR)\n\n</code>\n\nВ Makefile обычно определяются зависимости между различными частями проекта и команды для их сборки\n\n. У\n\nтилита make использует Makefile для автоматизации процесса компиляции и сборки программного обеспечения\n\nСтруктура Makefile\n\n1\n\n. C\n\nC = javac — определяет переменную CC и устанавливает ее значение равным javac , что указывает на компилятор Java\n\n2\n\n. T\n\nARGET_DIR = target — здесь определяется переменная TARGET_DIR и устанавливается в значение target , указывающее на директорию, где будут храниться скомпилированные файлы\n\n3\n\n. T\n\nARGET = $(TARGET_DIR)/Main — определяет переменную TARGET , которая представляет собой путь к главному исполняемому файлу Main\n\n4. all: $(TARGET) — это цель all , которая зависит от цели $(TARGET) , что означает, что при запуске make all будет собран целевой файл Main\n\n5. $(TARGET): Main.java — указывает, что цель $(TARGET) зависит от файла Main.java\n\n6. mkdir -p $(TARGET_DIR) — создает директорию $(TARGET_DIR) с ключом -p, который создает все промежуточные директории в пути, если они отсутствуют\n\n7. $(CC) -d $(TARGET_DIR) Main.java — использует переменную CC (компилятор javac) для компиляции файла Main.java и помещает скомпилированный файл в директорию $(TARGET_DIR)\n\n8. clean: rm -rf $(TARGET_DIR) — удаляет директорию $(TARGET_DIR) и все ее содержимое рекурсивно\n\nПроверьте, что Makefile исполняется\n\n$ make\n\njavac Main.java\n\nВ результате должен появиться файл Main.class\n\nКогда вы выполнили команду make , она вызвала правило all , которое зависит от цели $(TARGET) , в данном случае Main \n\n. Э\n\nто правило указывает, что для создания цели Main необходимо выполнить команду javac Main.java , которая компилирует файл Main.java с использованием Java компилятора (javac)\n\n. Т\n\nаким образом, при выполнении make была автоматически вызвана команда компиляции Java файла\n\nПроверьте скомпилированный файл\n\nПример успешного выполнения\n\n$ java Main\n\nHello, World!\n\nКогда вы выполняете java Main , Java ВМ ожидает, что имя класса будет указано после слова java , без расширения файла\n\n. Т\n\nаким образом, Main будет рассматриваться как имя класса для запуска\n\nС другой стороны, когда вы используете java Main.java , вы указываете Java ВМ запустить файл Main.java , который не является допустимым способом для запуска Java программы\n\n. J\n\nava ВМ ожидает имя класса, а не имени файла .java\n\njavaMakefileBuildDemo.yaml\n\n<code>\n\nname: Сборка проекта через Makefile\n\non:\n\npush:\n\njobs:\n\nbuild-test:\n\nname: javaMakefileBuildDemo\n\nruns-on: ubuntu-latest\n\nsteps:\n\n- uses: actions/checkout@v3  # Checkout the repository code\n\n- name: Install jdk\n\nrun: |\n\napt-get update\n\napt-get -y install default-jdk\n\n- name: build project through Makefile\n\nrun: |\n\nmake\n\n- name: Set Git user email\n\nrun: |\n\ngit config --local user.email \"author@gitverse.com\"\n\n- name: Set Git user name",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Подготовительные действия"
+            ],
+            "type": [
+                "конфигурация"
+            ],
+            "topic": [
+                "ci/cd",
+                "java",
+                "workflow",
+                "yaml",
+                "branch",
+                "runner",
+                "makefile",
+                "configuration",
+                "setup",
+                "docker"
+            ]
+        }
+    },
+    {
+        "content": "файла . Т аким образом, Main будет рассматриваться как имя класса для запуска С другой стороны, когда вы используете java Main.java , вы указываете Java ВМ запустить файл Main.java , который не является допустимым способом для запуска Java программы . J ava ВМ ожидает имя класса, а не имени файла .java javaMakefileBuildDemo.yaml <code> name: Сборка проекта через Makefile on: push: jobs: build-test: name: javaMakefileBuildDemo runs-on: ubuntu-latest steps: - uses: actions/checkout@v3 # Checkout the repository code - name: Install jdk run: | apt-get update apt-get -y install default-jdk - name: build project through Makefile run: | make - name: Set Git user email run: | git config --local user.email \"author@gitverse.com\" - name: Set Git user name\n\nrun: |\n\ngit config --local user.name \"author\"\n\n- name: Create new makefile-build-branch\n\nrun: |\n\ngit checkout -b makefile-build-branch\n\ngit add .\n\ngit commit -m \"a project through Makefile is built\"\n\n- name: Push to remote branch\n\nrun: |\n\ngit push -u origin makefile-build-branch –force\n\n</code>\n\nСтруктура javaMakefileBuildDemo.yaml\n\n• name: Сборка проекта через Makefile — название работы (job), которая отвечает за сборку проекта через Makefile\n\n• on: push: — этот job будет запускаться при каждом push'е в репозиторий\n\n• name: javaMakefileBuildDemo — название этой конкретной задачи сборки проекта через Makefile\n\n• runs-on: ubuntu-latest — указание о том, что задача будет выполняться на последней версии Ubuntu\n\n• - uses: actions/checkout@v3 — используется для клонирования кода репозитория\n\n• - name: Install jdk — название шага, устанавливающего JDK\n\n• apt-get update — обновление пакетов\n\n• apt-get -y install default-jdk — установка JDK\n\n• run: | — начало блока команд для выполнения\n\n• make — вызов команды make для сборки проекта\n\n• run: | — начало блока команд для выполнения\n\n• - name: build project through Makefile — название шага, собирающего проект через Makefile\n\n• git config --local user.email \"author@gitverse.com\" — установка email пользователя Git\n\n• run: | — начало блока команд для выполнения\n\n• - name: Set Git user email — название шага, устанавливающего email пользователя Git\n\n• git config --local user.name \"author\" — установка имени пользователя Git\n\n• run : | — начало блока команд для выполнения\n\n• - name: Set Git user name — название шага, устанавливающего имя пользователя Git\n\n• git branch -d makefile-build-branch — удаление ветки локально\n\n• git checkout -b makefile-build-branch — создание новой ветки\n\n• git add . — добавление изменений для коммита\n\n• git commit -m \"a project through Makefile is built\" — коммит изменений с сообщением\n\n• run: | : Начало блока команд для выполнения\n\n• - name: Create new makefile-build-branch — название шага, создающего новую ветку для сборки через Makefile\n\n• git push -u origin makefile-build-branch --force — отправка изменений на удаленную ветку\n\n• run: | — начало блока команд для выполнения\n\n• - name: Push to remote branch — название шага, отправляющего изменения на удаленную ветку\n\n• steps: — начало списка шагов, необходимых для выполнения этой задачи\n\n• jobs: build-test: — начало описания работы с именем build-test",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Подготовительные действия"
+            ],
+            "type": [
+                "конфигурация"
+            ],
+            "topic": [
+                "ci/cd",
+                "java",
+                "workflow",
+                "yaml",
+                "branch",
+                "runner",
+                "makefile",
+                "configuration",
+                "setup",
+                "docker"
+            ]
+        }
+    },
+    {
+        "content": "CI/CD Сборка\n\nПолучите токен раннера\n\nСоздайте токен раннера в профиле репозитория во вкладке Настройки > Раннеры > Добавить раннер > пиктограмма копирования раннера\n\nЗарегистрируйте раннер\n\n<code>\n\n$ sudo ./act_runner register\n\nINFO Registering runner, arch=amd64, os=linux, version=40a6fce.\n\nINFO Enter the runner token:\n\nqbTVGAj5pZrLtYTjAR3SSHoWu3Qy6dgBkSkyJAwo\n\nINFO Enter the runner name (if set empty, use hostname: DESKTOP-VOTMM9Q):\n\nmakefile-build-demo\n\nINFO Enter the runner labels, leave blank to use the default labels (comma-separated, for example, ubuntu-20.04:docker://node:16-bullseye,ubuntu-18.04:docker://node:16-buster,linux_arm:host):\n\nINFO Registering runner, name=makefile-build-demo, instance=https://gitverse.ru/sc, labels=[ubuntu-latest:docker://node:16-bullseye ubuntu-22.04:docker://node:16-bullseye ubuntu-20.04:docker://node:16-bullseye ubuntu-18.04:docker://node:16-buster].\n\nDEBU Successfully pinged the GitVerse instance server\n\nINFO Runner registered successfully.\n\n</code>\n\nСохраните и отправьте изменения в удаленный репозиторий\n\n<code>\n\ngit add .\n\ngit commit -m \"ваш комментарий\"\n\ngit push -u origin makefile-build\n\n</code>\n\nЗапустите раннер\n\nsudo ./act_runner daemon\n\nРаннер сработает на ранее отправленное изменение (событие push ) и через некоторое время отправит в репозиторий новую ветку makefile-build-branch с собранным проектом",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Подготовительные действия"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "ci/cd",
+                "java",
+                "workflow",
+                "secrets",
+                "branch",
+                "runner",
+                "makefile",
+                "configuration",
+                "setup",
+                "docker"
+            ]
+        }
+    },
+    {
+        "content": "Проверка сборки\n\nЧерез некоторое время раннер выполнит задачи\n\nПосле успешной сборки обновите ваш локальный репозиторий, сохраните изменения в текущей ветке (если они были сделаны) и перейдите в ветку makefile-build-branch\n\n<code>\n\ngit pull\n\ngit add .\n\ngit commit -m \"ваш комментарий\"\n\ngit switch makefile-build-branch\n\n</code>\n\nЗапустите проект\n\n$ java /target/Main\n\nHello, World!\n\nКогда вы используете java Main , Java виртуальная машина ожидает, что имя класса будет указано после слова java , без расширения файла. Таким образом, Main будет рассматриваться как имя класса для запуска\n\nС другой стороны, когда вы используете java Main.java , вы указываете Java виртуальной машине запустить файл Main.java , который не является допустимым способом для запуска Java-программы. Таким образом Java виртуальная машина ожидает имя класса, а имя файла .java\n\nCI/CD сборка Maven",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Проверка сборки"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "ci/cd",
+                "workflow",
+                "branch",
+                "maven",
+                "runner",
+                "makefile",
+                "java",
+                "docker"
+            ]
+        }
+    },
+    {
+        "content": "В данном разделе рассмотрен пример CI/CD Maven сборки проекта java\n\nДля проверки данного примера примера подготовлена ветка maven-build репозитория CICD_building_projects",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "CI/CD сборки Maven проекта"
+            ],
+            "type": [
+                "пример"
+            ],
+            "topic": [
+                "ci/cd",
+                "workflow",
+                "branch",
+                "maven",
+                "java",
+                "setup"
+            ]
+        }
+    },
+    {
+        "content": "Подготовительные действия\n\n1. Создайте репозиторий , например, CICD_building_projects\n\n2. Обновите список доступных пакетов\n\nsudo apt update\n\n1. Установите пакет по умолчанию JDK, который включает в себя компилятор Java\n\nsudo apt install default-jdk\n\nПроверьте, что компилятор установлен\n\njavac -version\n\n1. Скачайте раннер и сделайте его исполняемым\n\nchmod +x act_runner\n\n1. Установите docker\n\n2. Включите CI/CD в настройках вашего репозитория\n\n1. Установите Maven\n\nОбновите список пакетов\n\nsudo apt update\n\nУстановите Maven\n\nsudo apt install maven\n\nПроверьте установку\n\n<code>\n\n$ mvn -version\n\nApache Maven 3.6.3\n\nMaven home: /usr/share/maven\n\nJava version: 11.0.23, vendor: Ubuntu, runtime: /usr/lib/jvm/java-11-openjdk-amd64\n\nDefault locale: en, platform encoding: UTF-8\n\nOS name: \"linux\", version: \"5.15.153.1-microsoft-standard-wsl2\", arch: \"amd64\", family: \"unix\"\n\n</code>\n\nHelloWorld.Java\n\nСоздайте в директории src/main/java/ru/gitverse/tutorials/helloworld файл HelloWorld.Java с кодом\n\n<code>\n\npackage ru.gitverse.tutorials.helloworld;\n\npublic class HelloWorld {\n\npublic static void main(String[] args) {\n\nSystem.out.println(\"Hello, World!\");\n\n}\n\n}\n\n</code>\n\nПроверьте, что файл исполняется\n\n$ java src/main/java/ru/gitverse/tutorials/helloworld/HelloWorld.java\n\nHello, World!\n\npom.xml\n\npom.xml — это файл конфигурации Maven, где вы определяете информацию о вашем проекте, такую как groupId, artifactId, version, зависимости и т.д\n\nПример pom.xml\n\n<code>\n\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<project xmlns=\"http://maven.apache.org/POM/4.0.0\"\n\nxsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\">\n\n<modelVersion>4.0.0</modelVersion>\n\n<groupId>ru.gitverse.tutorials</groupId>\n\n<artifactId>hello-world-module</artifactId>\n\n<version>0.0.1</version>\n\n<packaging>jar</packaging>\n\n<repositories>\n\n<repository>\n\n<id>gitverse</id>\n\n<url>https://gitverse.ru/api/packages/author/maven/</url>\n\n</repository>\n\n</repositories>\n\n<properties>\n\n<maven.compiler.source>11</maven.compiler.source>\n\n<maven.compiler.target>11</maven.compiler.target>\n\n</properties>\n\n<distributionManagement>\n\n<repository>\n\n<id>gitverse</id>\n\n<url>https://gitverse.ru/api/packages/author/maven/</url>\n\n</repository>\n\n<snapshotRepository>\n\n<id>gitverse</id>\n\n<url>https://gitverse.ru/api/packages/author/maven/</url>\n\n</snapshotRepository>\n\n</distributionManagement>\n\n<build>\n\n<plugins>\n\n<plugin>\n\n<groupId>org.apache.maven.plugins</groupId>\n\n<artifactId>maven-jar-plugin</artifactId>\n\n<configuration>\n\n<archive>\n\n<manifest>\n\n<mainClass>ru.gitverse.tutorials.helloworld.HelloWorld</mainClass>\n\n</manifest>\n\n</archive>\n\n</configuration>\n\n</plugin>\n\n</plugins>\n\n</build>\n\n</project>\n\n</code>\n\nСм. комментарии к pom.xml первого и второго проектов из примера создания и подключения пакета Maven\n\njavaMavenBuildDemo.yaml",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Подготовительные действия"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "ci/cd",
+                "java",
+                "workflow",
+                "yaml",
+                "api",
+                "maven",
+                "runner",
+                "configuration",
+                "setup",
+                "docker"
+            ]
+        }
+    },
+    {
+        "content": "Файл javaMavenBuildDemo.yaml следует расположить в директории .gitverse/workflows/ вашего проекта, он определяет конфигурацию работы CI/CD для GitVerse\n\nКод файла\n\n<code>\n\nname: Установка пакета Maven\n\non:\n\npush:\n\njobs:\n\nbuild-test:\n\nname: Maven Build\n\nruns-on: ubuntu-latest\n\nsteps:\n\n- uses: actions/checkout@v3 # Checkout the repository code\n\n- name: Set Git user email and name\n\nrun: |\n\ngit config --local user.email \"author@gitverse.ru\"\n\ngit config --local user.name \"author\"\n\n- name: Install Maven\n\nrun: |\n\napt-get update\n\napt-get -y install maven\n\n- name: build maven package\n\nrun: |\n\nmvn clean package\n\n- name: Push to remote branch\n\nrun: |\n\ngit checkout -b new-maven-build-branch\n\ngit add .\n\ngit commit -m \"Added\"\n\ngit push origin new-maven-build-branch  --force\n\n</code>\n\nСтруктура\n\n• name: Установка пакета Maven — название шага в вашем workflow, которое описывает действие этого шага\n\n• on: push — событие, на которое реагирует workflow — в данном случае, это push в репозиторий\n\n• jobs — ключевое слово, указывающее на начало определения задач (jobs) в вашем workflow\n\n• build-test — название задачи (job) в вашем workflow, описывающее что будет выполняться в этой задаче\n\n• runs-on: ubuntu-latest — указывает, что задача будет выполняться на последней версии Ubuntu\n\n• uses: actions/checkout@v3 — этот шаг использует действие (action) для проверки (checkout) кода репозитория\n\n• git config --local user.email \"author@gitverse.ru\" — устанавливает email пользователя Git\n\n• git config --local user.name \"author\" — устанавливает имя пользователя Git\n\n• run: | — этот ключевой момент начинает многострочный скрипт, который будет выполняться в этом шаге\n\n• name: Set Git user email and name — название этого шага описывает установку почты и имени пользователя Git\n\n• apt-get update — обновляет список пакетов Ubuntu\n\n• apt-get -y install maven — устанавливает Maven с подтверждением без запроса\n\n• run: | — начало скрипта для установки Maven\n\n• name: Install Maven — название этого шага описывает установку Maven",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "CI/CD сборки Maven проекта"
+            ],
+            "type": [
+                "конфигурация"
+            ],
+            "topic": [
+                "ci/cd",
+                "java",
+                "workflow",
+                "yaml",
+                "branch",
+                "maven",
+                "configuration",
+                "setup"
+            ]
+        }
+    },
+    {
+        "content": "• mvn clean package — команда для очистки и сборки проекта с помощью Maven\n\n• name: Push to remote branch — название этого шага описывает отправку изменений в удаленную ветку\n\n• run: | — начало скрипта для сборки пакета Maven\n\n• name: build maven package — название этого шага описывает сборку пакета с помощью Maven\n\n• git checkout -b new-maven_build-branch — создает новую ветку new-maven_build-branch\n\n• git add . — добавляет все изменения в индекс\n\n• git commit -m \"Added\" — делает коммит с сообщением \"Added\"\n\n• git push origin new-maven_build-branch --force — отправляет изменения в удаленную ветку new-maven_build-branch с принудительным обновлением\n\n• run: | — начало скрипта для отправки изменений\n\n• steps — ключевое слово, указывающее на начало определения шагов в вашей задаче\n\nCI/CD Сборка\n\nПолучите токен раннера\n\nСоздайте токен раннера в профиле репозитория во вкладке Настройки > Раннеры > Добавить раннер > пиктограмма копирования раннера\n\nЗарегистрируйте раннер\n\nsudo ./act_runner register\n\nОтправьте изменения в удаленный репозиторий\n\ngit push -u origin makefile-build\n\nЗапустите раннер\n\nsudo ./act_runner daemon\n\nСтатус раннера сменится на активный\n\nРаннер сработает на событие push ранее отправленной ветки makefile-build и далее будет срабатывать при каждом событии push\n\nЧерез некоторое время раннер выполнит задачи\n\nПерейдите в профиль репозитория > CI/CD, выберите ваш поток. Отобразится статус выполнения",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "CI/CD сборки Maven проекта"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "ci/cd",
+                "workflow",
+                "secrets",
+                "branch",
+                "maven",
+                "runner",
+                "makefile",
+                "configuration",
+                "setup",
+                "docker"
+            ]
+        }
+    },
+    {
+        "content": "Проверка сборки\n\nОбновите ваш локальный репозиторий, сохраните изменения в текущей ветке и перейдите в ветку makefile-build-branch\n\n<code>\n\ngit pull\n\ngit add .\n\ngit commit -m \"ваш комментарий\"\n\ngit switch new-maven-build-branch\n\nПроверьте сборку\n\n$ java -jar target/hello-world-module-0.0.1.jar\n\nHello, World!\n\n</code>",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Проверка сборки"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "makefile",
+                "java",
+                "branch",
+                "maven"
+            ]
+        }
+    },
+    {
+        "content": "CI/CD-сборка и публикация в RuStore",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "CI/CD-сборка и публикация в RuStore"
+            ],
+            "type": [
+                "описание"
+            ],
+            "topic": [
+                "ci/cd",
+                "rustore",
+                "workflow"
+            ]
+        }
+    },
+    {
+        "content": "Использование секретов",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Использование секретов"
+            ],
+            "type": [
+                "описание"
+            ],
+            "topic": [
+                "secrets"
+            ]
+        }
+    },
+    {
+        "content": "Вы можете разместить свой проект на GitVerse, автоматически собрать его и отправить на публикацию в RuStore с помощью CI/CD. В этом руководстве используется подготовленный шаблон и скрипт с применением RuStore API. Скрипт реализует базовую функциональность — получение токена, создание черновика, отправку новой версии приложения и удаление черновика",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Интеграция GitVerse с RuStore"
+            ],
+            "type": [
+                "описание"
+            ],
+            "topic": [
+                "ci/cd",
+                "rustore",
+                "workflow",
+                "secrets",
+                "api",
+                "setup"
+            ]
+        }
+    },
+    {
+        "content": "Первую версию приложения необходимо загрузить вручную  через RuStore Консоль. Если вы не используете API для манипуляций с приложением, а, например, делаете это через черновик, этот шаг опционален",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "CI/CD-сборка и публикация в RuStore"
+            ],
+            "type": [
+                "пример"
+            ],
+            "topic": [
+                "rustore",
+                "api"
+            ]
+        }
+    },
+    {
+        "content": "Если у вас меняются настройки приложения, например, вы добавляете новые разрешения, то вам необходимо изменить соответствующие настройки в консоли RuStore. Иначе CI/CD будет давать ошибку несоответствия разрешений локальной версии и загруженной при отправке пакета приложения\n\nНастройка",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "CI/CD-сборка и публикация в RuStore"
+            ],
+            "type": [
+                "пример"
+            ],
+            "topic": [
+                "ci/cd",
+                "rustore",
+                "workflow",
+                "configuration",
+                "setup"
+            ]
+        }
+    },
+    {
+        "content": "Для настройки интеграции вам понадобится приватный ключ RuStore API и ID приватного ключа. Также для конфигурации скрипта нужны метаданные вашего приложения (className и др.). Информацию можно посмотреть в RuStore Консоль  > вкладка Компания или Разработчик > API RuStore. Если ключа нет, сгенерируйте ключевую пару",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "CI/CD-сборка и публикация в RuStore"
+            ],
+            "type": [
+                "описание"
+            ],
+            "topic": [
+                "configuration",
+                "rustore",
+                "setup",
+                "api"
+            ]
+        }
+    },
+    {
+        "content": "Чтобы настроить интеграцию GitVerse с RuStore\n\n1. Зарегистрируйтесь на GitVerse и создайте организацию . Организация — логический юнит разделения внутри GitVerse, удобный механизм для управления проектами\n\n2. Создайте новый репозиторий . Активируйте CI/CD в настройках (в меню репозитория должна появиться вкладка CI/CD)",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Интеграция GitVerse с RuStore"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "ci/cd",
+                "rustore",
+                "workflow",
+                "configuration",
+                "setup"
+            ]
+        }
+    },
+    {
+        "content": "3. Зарегистрируйте агент GitVerse CI/CD для сборки и отправки вашего приложения в RuStore. Его можно создать в Linux, WSL (Windows), либо любом облаке. Интеграция в данной инструкции тестировалась в WSL (Ubuntu) и виртуальной машине Cloud.ru\n\n4. Объявите следующие переменные в разделе CI/CD настроек проекта, либо используйте переменные внутри кода, как это сделано в шаблоне",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Интеграция GitVerse с RuStore"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "ci/cd",
+                "cloud",
+                "rustore",
+                "workflow"
+            ]
+        }
+    },
+    {
+        "content": "4.1. PRIVATE_KEY — приватный ключ приложения из RuStore Консоль",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "CI/CD-сборка и публикация в RuStore"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "rustore"
+            ]
+        }
+    },
+    {
+        "content": "4.2. KEY_ID — идентификатор приватного ключа из RuStore Консоль",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "CI/CD-сборка и публикация в RuStore"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "rustore"
+            ]
+        }
+    },
+    {
+        "content": "5. Шаблон проекта находится в evangelism/rustore | Gitverse  . Обратите внимание, что этот шаблон предназначен для тестирования и вам необходимо избегать хранения открытых паролей, идентификаторов и прочей информации. В шаблоне используется генератор токенов от RuStore в .jar, вы можете использовать любой другой способ для его генерации",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Интеграция GitVerse с RuStore"
+            ],
+            "type": [
+                "пример"
+            ],
+            "topic": [
+                "java",
+                "secrets",
+                "rustore"
+            ]
+        }
+    },
+    {
+        "content": "6. Чтобы воспользоваться тестовым проектом, выполните git clone https://gitverse.ru/evangelism/rustore , настройте раннеры и укажите собственные значения конфигурации\n\nЧто дальше​",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Интеграция GitVerse с RuStore"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "configuration",
+                "rustore",
+                "runner"
+            ]
+        }
+    },
+    {
+        "content": "Перед отправкой в RuStore новой версии приложения заполните ее атрибуты в файле rustore.sh . Описание атрибутов есть в разделе Создание черновика версии",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "CI/CD-сборка и публикация в RuStore"
+            ],
+            "type": [
+                "описание"
+            ],
+            "topic": [
+                "rustore"
+            ]
+        }
+    },
+    {
+        "content": "После этого запустите сборку и загрузите версию приложения в RuStore",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "CI/CD-сборка и публикация в RuStore"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "rustore"
+            ]
+        }
+    },
+    {
+        "content": "Облачные раннеры, пример\n\nПример предназначен для демонстрации выполнения CI/CD с использованием облачного раннера и для его выполнения не требуется никаких настроек на стороне пользователя\n\nПроект выложен в репозитории GitVerse, ветка Cloud-CI/CD-demo",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Облачные раннеры, пример"
+            ],
+            "type": [
+                "пример"
+            ],
+            "topic": [
+                "ci/cd",
+                "cloud",
+                "workflow",
+                "branch",
+                "runner"
+            ]
+        }
+    },
+    {
+        "content": "Подготовительные действия",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Подготовительные действия"
+            ],
+            "type": [
+                "описание"
+            ],
+            "topic": [
+                "setup"
+            ]
+        }
+    },
+    {
+        "content": "Включение CI/CD\n\nВ профиле репозитория > Настройки > Репозиторий включите CI/CD и нажмите Обновить\n\nПодробнее см. в разделе Включение/выключение CI/CD\n\nСтруктура проекта\n\n<code>\n\n├── cloud_runner_demo_readme.md\n\n├── .gitignore\n\n└── .gitverse\n\n└── workflows\n\n└── cloud-runner-demo.yaml\n\n</code>\n\ncloud-runner-demo.yaml\n\nВ файле cloud-runner-demo.yaml пропишите метку облачного раннера — runs on: ubuntu-cloud-runner\n\n<code>\n\nname: Демонстрация GitVerse Cloud CI/CD\n\non:\n\npush:\n\njobs:\n\nbuild-test:\n\nname: Cloud Runner Demo\n\nruns-on: ubuntu-cloud-runner\n\ncontainer:\n\noptions: --cpus=0.5 --memory=2G --net=bridge ## Ограничения по CPU (50%) и RAM\n\nsteps:\n\n- name: Display event name\n\nrun: echo ${{ gitverse.event_name }}\n\n- name: Display Workflow\n\nrun: echo ${{ gitverse.workflow }}\n\n- name: Display repository name\n\nrun: echo ${{ gitverse.Repository}}\n\n- name: Display repository owner\n\nrun: echo ${{ gitverse.repository_owner }}\n\n- name: Display actor\n\nrun: echo ${{ gitverse.actor }}\n\n</code>\n\nСоздание .yaml -файла из шаблона\n\nЕсли в вашем репозитории ещё нет .yaml -файлов рабочего процесса, то первый .yaml -файл можно создать из шаблона\n\nДля создания .yaml -файла рабочего процесса из шаблона в профиле репозитория > CI/CD > нажмите Попробовать\n\n1. В профиле репозитория\n\n1.1. Перейдите на вкладку CI/CD\n\n1.2. Нажмите Попробовать\n\n2. В редакторе репозитория отроется шаблон с файлом .gitverse/workflows/demo.yaml\n\nПосле внесения правок для добавления файла в репозиторий\n\nПример\n\n2.1. Нажмите Сохранить\n\n2.2. В модальном окне создания коммита снова нажмите сохранить\n\nКод шаблона .gitverse/workflows/demo.yaml\n\n<code>\n\nname: Простой пример использования GitVerse CI/CD\n\non:\n\npush:\n\njobs:\n\nbuild-test:\n\nname: Test context\n\n# для примера мы используем запуск на облачном раннере https://gitverse.ru/docs/knowledge-base/actions/cloud-runners/\n\nruns-on: ubuntu-cloud-runner\n\nsteps:\n\n- name: Display event name\n\nrun: echo ${{ gitverse.event_name }}\n\n- name: Display Workflow\n\nrun: echo ${{ gitverse.workflow }}\n\n- name: Display repository name\n\nrun: echo ${{ gitverse.Repository }}\n\n- name: Display repository owner\n\nrun: echo ${{ gitverse.repository_owner }}\n\n- name: Display actor\n\nrun: echo ${{ gitverse.actor }}\n\n</code>\n\nЗапуск облачного раннера\n\nСогласно cloud-runner-demo.yaml задача name: Демонстрация GitVerse Cloud CI/CD будет выполняться при каждом событии on: push: в ветке с файлом рабочего процесса cloud-runner-demo.yaml\n\nПереход к yaml -файлу со страницы результата работы\n\n1. Чтобы посмотреть результат работы раннера и перейти к yaml -файлу рабочего процесса, выберите задачу в профиле репозитория > CI/CD",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Включение CI/CD"
+            ],
+            "type": [
+                "конфигурация"
+            ],
+            "topic": [
+                "ci/cd",
+                "cloud",
+                "workflow",
+                "yaml",
+                "branch",
+                "runner",
+                "configuration",
+                "setup"
+            ]
+        }
+    },
+    {
+        "content": "В данном случае для запуска раннера были закоммичены и отправлены изменения в ветке Cloud-CI/CD-demo в файле cloud_runner_demo_readme.md с сообщением update README.md\n\n2. На отобразившейся странице нажмите на ссылку yaml -файла рабочего процесса\n\nОграничения облачных раннеров\n\n1. Каждая отдельная задача выполняется облачным раннером не более 15 минут\n\n2. Облачные раннеры имеют ежемесячный лимит сборочного времени: 1000 минут в месяц\n\n3. Один пользователь может использовать не более двух облачных раннеров одновременно\n\nПроверка оставшегося лимита\n\nДля проверки оставшегося лимита на использование облачных раннеров перейдите в профиль репозитория > Настройки > Раннеры > Облачные\n\nРаннер организации, пример\n\nНастоящий пример демонстрирует регистрацию и работу одного раннера организации с двумя репозиториями (репозитории должны быть в составе организации)\n\nСсылки для скачивания раннеров см. в таблице\n\nРепозитории из настроящего примера открыты и доступны для импорта\n\n1. org_runner_example1\n\n2. org_runner_example2\n\nСтруктура проекта\n\n1. Структура проекта с раннером — раннер можно размещать, регистрировать и запускать в любой директории\n\n2. Структура репозитория org_runner_example1\n\n<code>\n\n$ tree -a -I .git\n\n.\n\n├── .gitverse\n\n│   └── workflows\n\n│       └── orgRunnerDemo1.yaml\n\n├── README.md\n\n└── push_commit_to_start_runner.md.md\n\n1. Структура репозитория org_runner_example2\n\n$ tree -a -I .git\n\n.\n\n├── .gitverse\n\n│   └── workflows\n\n│       └── orgRunnerDemo2.yaml\n\n├── README.md\n\n└── push_commit_to_start_runner.md.md\n\n</code>\n\nРабочие процессы репозиториев\n\norgRunnerDemo1.yaml первого репозитория\n\n<code>\n\nname: Organization CI/CD Demo part 1\n\non:\n\npush:\n\njobs:\n\nbuild-test:\n\nname: first repo workflow\n\nruns-on: org-runner # метка раннера\n\nsteps:\n\n- name: Display Workflow\n\nrun: echo ${{ gitverse.workflow }}\n\n- name: Display repository name\n\nrun: echo ${{ gitverse.Repository}}\n\n</code>\n\norgRunnerDemo1.yam2 второго репозитория\n\n<code>\n\nname: Organization CI/CD Demo part 2\n\non:\n\npush:\n\njobs:\n\nbuild-test:\n\nname: second repo workflow\n\nruns-on: org-runner # метка раннера\n\nsteps:\n\n- name: Display Workflow\n\nrun: echo ${{ gitverse.workflow }}\n\n- name: Display repository name\n\nrun: echo ${{ gitverse.Repository}}\n\n</code>",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Запуск раннера в Docker контейнере"
+            ],
+            "type": [
+                "конфигурация"
+            ],
+            "topic": [
+                "ci/cd",
+                "cloud",
+                "workflow",
+                "yaml",
+                "branch",
+                "runner",
+                "configuration",
+                "setup",
+                "docker"
+            ]
+        }
+    },
+    {
+        "content": "Подготовительные действия",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Подготовительные действия"
+            ],
+            "type": [
+                "описание"
+            ],
+            "topic": [
+                "setup"
+            ]
+        }
+    },
+    {
+        "content": "Включение CI/CD\n\nCI/CD при создании по умолчанию включен (начиная с релиза 15.0.0 )\n\nДля включения/выключения CI/CD в профиле вашего репозитория нажмите\n\n1. Настройки\n\n2. Репозиторий\n\n3. CI/CD\n\n4. Обновить",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Включение CI/CD"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "configuration",
+                "ci/cd",
+                "setup",
+                "workflow"
+            ]
+        }
+    },
+    {
+        "content": "Установка docker",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Установка Docker"
+            ],
+            "type": [
+                "описание"
+            ],
+            "topic": [
+                "setup",
+                "docker"
+            ]
+        }
+    },
+    {
+        "content": "См. раздел Установка Docker (Ubuntu)\n\nПодготовка раннера\n\n1. Скачайте раннер , соответствующий вашей ОС. В данном примере используется act_runner_linux_amd64\n\n2. Разместите раннер в любом каталоге\n\n3. Передайте права на исполнение\n\nsudo chmod +x act_runner_linux_amd64",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Установка Docker"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "docker",
+                "setup",
+                "runner"
+            ]
+        }
+    },
+    {
+        "content": "Получение токена раннера организации",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Получение токена и запуск раннера"
+            ],
+            "type": [
+                "описание"
+            ],
+            "topic": [
+                "secrets",
+                "runner"
+            ]
+        }
+    },
+    {
+        "content": "Для получения токена регистрации раннера перейдите в профиль организации и далее\n\n1. Перейдите в Настройки\n\n2. Выберите Раннеры\n\n3. Нажмите Добавить раннер\n\n4. Скопируйте регистрационный токен\n\nРегистрация раннера\n\nВ команде регистрации раннера замените токен на скопированный в профиле организации\n\n<code>\n\nsudo ./act_runner_linux_amd64 register \\\n\n--no-interactive \\\n\n--instance https://gitverse.ru/sc \\\n\n--token q3l7yDL0mh4gn4Yg3XfxnMuRDqoFEZf3pEr7KUOq \\\n\n--name organization-runner-demo \\\n\n--labels org-runner\n\n</code>\n\n1. Строка --name organization-runner-demo определит имя раннера, которое можно найти позднее в отчете\n\n2. Строка --labels org-runner определит имя метки раннера, которое должно быть так же прописано в рабочем процессе репозитория\n\nОтобразится ответ вида\n\n<code>\n\n$ sudo ./act_runner_linux_amd64 register \\\n\n> --no-interactive \\\n\n> --instance https://gitverse.ru/sc \\\n\n> --token q3l7yDL0mh4gn4Yg3XfxnMuRDqoFEZf3pEr7KUOq \\\n\n> --name organization-runner-demo \\\n\n> --labels org-runner\n\nINFO Registering runner, arch=amd64, os=linux, version=3.0.4.\n\nDEBU Successfully pinged the GitVerse instance server\n\nINFO Runner registered successfully.\n\n</code>\n\nВ профиле организации > Настройки > Раннеры отобразится зарегистрированный раннер",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Получение токена и запуск раннера"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "secrets",
+                "runner",
+                "configuration",
+                "setup",
+                "docker"
+            ]
+        }
+    },
+    {
+        "content": "Запуск раннера",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Запуск раннера"
+            ],
+            "type": [
+                "описание"
+            ],
+            "topic": [
+                "runner"
+            ]
+        }
+    },
+    {
+        "content": "Для запуска раннера выполните команду\n\nsudo ./act_runner_linux_amd64 daemon\n\nПроверка работы раннера в репозиториях организации",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Запуск раннера в Docker контейнере"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "runner"
+            ]
+        }
+    },
+    {
+        "content": "Для запуска раннера внесите изменения в репозиторий и отправьте коммит, так как согласно файлам рабочего процесса orgRunnerDemo1.yaml и orgRunnerDemo1.yaml , раннер будет обрабатывать события push (для любого репозитория в организации с меткой org_runner )\n\n1. Перейдите в профиль первого репозитория > Настройки и выберите последний отчет\n\nИз шага Set up job видно, что задачи рабочего процесса orgRunnerDemo1.yaml выполнил наш раннер organization-runner-demo\n\n2. Перейдите на в профиль второго репозитория > Настройки и выберите последний отчет\n\nИз шага Set up job видно, что задачи рабочего процесса orgRunnerDemo2.yaml выполнил наш раннер organization-runner-demo\n\nWorkspace локального раннера, пример\n\nНастоящий пример демонстрирует работу CI/CD, где раннер имеет доступ к выделенному участку файловой системы, используя переменную окружения ${{ gitverse.workspace }} . Для этого в yaml -файле задается\n\n1. Метка локального раннера (которая в свою очередь присваивается раннеру при регистрации)\n\n2. Переменная окружения ${{ gitverse.workspace }}",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Запуск раннера в Docker контейнере"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "ci/cd",
+                "workflow",
+                "yaml",
+                "runner",
+                "configuration",
+                "setup"
+            ]
+        }
+    },
+    {
+        "content": "3. Точки монтирования каталогов в вашей файловой системе и в контейнере раннера\n\nСогласно .gitverse/workflows/self-hosted-runner-workspace-example.yaml раннер создает file.txt в выделенной директории файловой системы",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Запуск раннера в Docker контейнере"
+            ],
+            "type": [
+                "конфигурация"
+            ],
+            "topic": [
+                "docker",
+                "yaml",
+                "runner",
+                "workflow"
+            ]
+        }
+    },
+    {
+        "content": "Подготовительные действия",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Подготовительные действия"
+            ],
+            "type": [
+                "описание"
+            ],
+            "topic": [
+                "setup"
+            ]
+        }
+    },
+    {
+        "content": "Установка Docker",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Установка Docker"
+            ],
+            "type": [
+                "описание"
+            ],
+            "topic": [
+                "setup",
+                "docker"
+            ]
+        }
+    },
+    {
+        "content": "См. раздел. Установка Docker (Ubuntu)",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Установка Docker"
+            ],
+            "type": [
+                "описание"
+            ],
+            "topic": [
+                "setup",
+                "docker"
+            ]
+        }
+    },
+    {
+        "content": "Создание или импорт репозитория\n\nДля данного примера подготовлен репозиторий cicd_tutorials/self_hosted_runner_examples ветка self-hosted-runner-workspace-example\n\nПубличный репозиторий доступен для импортирования и уже содержит\n\n1. Файл рабочего процесса .gitverse/workflows/self-hosted-runner-workspace-example.yaml\n\n2. Раннер act_runner_linux_amd64\n\nyaml-файл рабочего процесса\n\nВ настоящем примере использован следующий yaml -файл рабочего процесса с использованием переменной окружения ${{ gitverse.workspace }}\n\n<code>\n\nname: Self-Hosted Runner Workspace Example\n\non:\n\npush:\n\nbranches:\n\n- self-hosted-runner-workspace-example # целевая ветка\n\njobs:\n\nupdate:\n\nruns-on: self-hosted # метка раннера (label), задается при регистрации\n\nworking-directory: ${{ gitverse.workspace }}  # переменная окружения - рабочая директория для job (задачи), выполняемого на self-hosted runner\n\ncontainer:\n\nimage: ubuntu:latest # docker образ, который будет загружен раннером и в котором будут выполняться задачи настоящего yaml-файла\n\nvolumes:\n\n- /home/author/Workspace/self_hosted_runner_examples/project_folder/:/container_folder  # точки монтирования каталогов в проекте (project_folder) и в контейнере раннера (container_folder)\n\nsteps:\n\n- name: Create project_folder directory\n\nrun: mkdir project_folder # создание каталога в проекте\n\n- name: Run a script\n\nrun: |\n\necho \"Hello from my self-hosted runner!\" > /container_folder/file.txt\n\ncat /container_folder/file.txt # Verify content\n\n</code>\n\nЗагрузка раннера\n\nМожете пропустить данный пункт, если вы импортировали репозиторий, а act_runner_linux_amd64 подходит для вашей ОС\n\nСкачайте раннер , соответствующий вашей ОС, разместите его в корне проекта и передайте права на исполнение\n\n<code>\n\n$ sudo chmod +x act_runner_linux_amd64\n\n$ tree -a\n\n│   .gitignore\n\n│   act_runner_linux_amd64\n\n│   README.md\n\n│\n\n└───.gitverse\n\n└───workflows\n\nself-hosted-runner-workspace-example.yaml\n\n</code>\n\nВ данном примере использован раннер act_runner_linux_amd64 для работы на WSL Ubuntu 22.04",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Создание или импорт репозитория"
+            ],
+            "type": [
+                "конфигурация"
+            ],
+            "topic": [
+                "ci/cd",
+                "workflow",
+                "yaml",
+                "branch",
+                "runner",
+                "setup",
+                "docker"
+            ]
+        }
+    },
+    {
+        "content": "Включение CI/CD в настройках репозитория и получение токена\n\n1. Для включения CI/CD в профиле вашего репозитория нажмите\n\n1.1. Настройки\n\n1.2. Репозиторий\n\n1.3. CI/CD\n\n1.4. Обновить",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Включение CI/CD"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "ci/cd",
+                "workflow",
+                "secrets",
+                "configuration",
+                "setup"
+            ]
+        }
+    },
+    {
+        "content": "2. Для получения токена для последующей регистрации локального раннера перейдите в профиль вашего репозитория и далее выберите\n\n2.1. Настройки\n\n2.2. Раннеры\n\n2.3. Локальные\n\n2.4. Добавить раннер\n\n2.5. Пиктограмму копирования токена\n\nРегистрации раннера\n\nПример команды неинтерактивной регистрации раннера с полученным ранее токеном\n\n<code>\n\nsudo ./act_runner_linux_amd64 register \\\n\n--no-interactive \\\n\n--instance https://gitverse.ru/sc \\\n\n--token DtYdkGFpO408x0qnUqgTuMwB7IVtoZ5WANL95GQr \\\n\n--name workspace-example \\\n\n--labels self-hosted\n\n</code>\n\nПодробнее см. Регистрация раннера",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Получение токена и запуск раннера"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "configuration",
+                "secrets",
+                "setup",
+                "runner"
+            ]
+        }
+    },
+    {
+        "content": "Запуск раннера\n\nОтправьте изменения в ветку self-hosted-runner-workspace-example и запустить раннер\n\nsudo ./act_runner_linux_amd64 daemon",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Запуск раннера"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "branch",
+                "runner"
+            ]
+        }
+    },
+    {
+        "content": "Подробнее см. Запуск раннера\n\nПроверка результата выполнения раннера\n\n1. Чтобы посмотреть отчет выполнения задачи раннером в профиле репозитория, выберите\n\n1.1. CI/CD\n\n1.2. Отчет раннера по вашему коммиту\n\n2. Ознакомьтесь с отчетом\n\nПроверьте, что раннер создал file.txt в указанном каталоге\n\n<code>\n\n$ git checkout self-hosted-runner-workspace-example\n\n$ tree -a\n\n│   .gitignore\n\n│   act_runner_linux_amd64\n\n│   .runner\n\n│   README.md\n\n│\n\n├───.gitverse\n\n│   └───workflows\n\n│           self-hosted-runner-workspace-example.yaml\n\n│\n\n└───project_folder\n\nfile.txt\n\n</code>",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Запуск раннера"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "ci/cd",
+                "yaml",
+                "runner",
+                "workflow"
+            ]
+        }
+    },
+    {
+        "content": "Составной рабочий процесс, пример\n\nНастоящий пример демонстрирует работу CI/CD, где в файле рабочего процесса подключается .yaml -файл из другого репозитория\n\nУсловия запуска\n\nВ данном примере запуск выполняется при событии push\n\non:\n\npush:\n\nПосле включения CI/CD для репозитория раннер будет срабатывать при внесении любого изменения в проект\n\nПолный список поддерживаемых событий см. в разделе Рабочие процессы\n\nПорядок выполнения\n\nПодготовка подключаемого yaml -файла\n\nПодключаемый проект из настоящего примера можно импортировать с https://gitverse.ru/cicd_tutorials/composite_actions_examples\n\nСоздайте или импортируйте репозиторий с yaml -файлом с требованиями\n\n1. Должен находиться в корне репозитория и называться action.yaml\n\n2. Для коммита c ним требуется создать тег\n\n3. Должен содержать в своем составе конструкцию using: \"composite\"\n\nПример подключаемого .yaml -файла\n\n<code>\n\nname: Hello world\n\ndescription: подключаемый yaml для составного рабочего процесса\n\nruns:\n\nusing: \"composite\"\n\nsteps:\n\n- name: Hello world\n\nrun: echo \"Hello world\"\n\n</code>\n\nСтруктура проекта с подключаемым yaml -файлом\n\n$ tree -a -I .git\n\n.\n\n├── README.md\n\n└── action.yaml\n\nПодготовка целевого yaml -файла\n\nЦелевой проект из настоящего примера можно импортировать с https://gitverse.ru/cicd_tutorials/custom_uses_example\n\nСоздайте или импортируйте репозиторий с целевым yaml -файлом, который должен\n\n1. Находиться в директории .gitverse/workflows/ вашего проекта\n\n2. Содержать конструкции uses: <username пользователя GitVerse>/<название репозитория>@<тег коммита>\n\nПример .yaml -файла целевого проекта\n\n<code>\n\nname: Пример с подключаемым yaml-файлом\n\non:\n\npush:\n\njobs:\n\nsay-hello:\n\nname: Тест uses\n\nruns-on: ubuntu-cloud-runner\n\nsteps:\n\n- name: custom uses example\n\nuses: cicd_tutorials/composite_actions_examples@v0.01\n\n</code>\n\nСтруктура целевого проекта\n\n$ tree -a -I .git\n\n.\n\n├── .gitverse\n\n│   └── workflows\n\n│       └── custom_uses_example.yaml\n\n└── README.md",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Составной рабочий процесс"
+            ],
+            "type": [
+                "конфигурация"
+            ],
+            "topic": [
+                "ci/cd",
+                "cloud",
+                "workflow",
+                "yaml",
+                "runner",
+                "setup"
+            ]
+        }
+    },
+    {
+        "content": "Запуск раннера\n\n1. В профиле репозитория > Настройки > Репозиторий включите CI/CD и нажмите Обновить\n\n2. Отправьте любой коммит , т.к. согласно composite_action_example.yaml задача будет выполняться при событии on: push:",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Запуск раннера"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "ci/cd",
+                "workflow",
+                "yaml",
+                "runner",
+                "configuration",
+                "setup"
+            ]
+        }
+    },
+    {
+        "content": "Проверка результата работы\n\nВ профиле репозитория перейдите на вкладку CI/CD и откройте отчет\n\nСогласно отчету, подключенный yaml -файл выполнил команду run: echo \"Hello world\"",
+        "metadata": {
+            "source_file": "GitVerse_CI_CD_All_V2.docx",
+            "section": [
+                "Проверка результата работы"
+            ],
+            "type": [
+                "инструкция"
+            ],
+            "topic": [
+                "ci/cd",
+                "workflow"
+            ]
+        }
+    }
+]
